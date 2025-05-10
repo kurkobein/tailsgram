@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 
 class PaginaPerfil extends StatelessWidget {
   const PaginaPerfil({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('perfil', style: TextStyle(fontSize: 30),),
+    return ProfileScreen(
+      providers: [EmailAuthProvider()],
+      actions: [
+        SignedOutAction((context) {
+          Navigator.pushReplacementNamed(context, '/sign-in');
+        }),
+      ],
     );
   }
 }

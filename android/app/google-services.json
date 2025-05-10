@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "210022483547",
-    "project_id": "tailsgram-59b17",
-    "storage_bucket": "tailsgram-59b17.firebasestorage.app"
+    "project_number": "1076409384850",
+    "project_id": "tailsgram-dccf7",
+    "storage_bucket": "tailsgram-dccf7.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:210022483547:android:ca4ea5c417a0cf7141a17e",
+        "mobilesdk_app_id": "1:1076409384850:android:e9b061af69da42848ccb4b",
         "android_client_info": {
           "package_name": "com.example.tailsgram"
         }
@@ -15,26 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDVL3J3rfFmIIoWXA-jyb2nE5ZMVJfBpU4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:210022483547:android:78c783db45d1e88141a17e",
-        "android_client_info": {
-          "package_name": "com.felipesanchez.testfirebase"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDVL3J3rfFmIIoWXA-jyb2nE5ZMVJfBpU4"
+          "current_key": "AIzaSyC1PMGYN78sece3dS7uIud3NLbTHEapFRw"
         }
       ],
       "services": {

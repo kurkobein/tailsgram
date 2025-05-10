@@ -17,29 +17,17 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -52,11 +40,48 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDVL3J3rfFmIIoWXA-jyb2nE5ZMVJfBpU4',
-    appId: '1:210022483547:android:ca4ea5c417a0cf7141a17e',
-    messagingSenderId: '210022483547',
-    projectId: 'tailsgram-59b17',
-    storageBucket: 'tailsgram-59b17.firebasestorage.app',
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyB1yXiOvEXjNJ-EsKp5oOh5jJ6tcjpaRLA',
+    appId: '1:1076409384850:web:8c674b72f829027c8ccb4b',
+    messagingSenderId: '1076409384850',
+    projectId: 'tailsgram-dccf7',
+    authDomain: 'tailsgram-dccf7.firebaseapp.com',
+    storageBucket: 'tailsgram-dccf7.firebasestorage.app',
   );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyC1PMGYN78sece3dS7uIud3NLbTHEapFRw',
+    appId: '1:1076409384850:android:e9b061af69da42848ccb4b',
+    messagingSenderId: '1076409384850',
+    projectId: 'tailsgram-dccf7',
+    storageBucket: 'tailsgram-dccf7.firebasestorage.app',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyB3-ASa-EicRbaEHlKwUSygeuYXWj6iqv4',
+    appId: '1:1076409384850:ios:1665410d3041abb58ccb4b',
+    messagingSenderId: '1076409384850',
+    projectId: 'tailsgram-dccf7',
+    storageBucket: 'tailsgram-dccf7.firebasestorage.app',
+    iosBundleId: 'com.example.tailsgram',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyB3-ASa-EicRbaEHlKwUSygeuYXWj6iqv4',
+    appId: '1:1076409384850:ios:1665410d3041abb58ccb4b',
+    messagingSenderId: '1076409384850',
+    projectId: 'tailsgram-dccf7',
+    storageBucket: 'tailsgram-dccf7.firebasestorage.app',
+    iosBundleId: 'com.example.tailsgram',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyB1yXiOvEXjNJ-EsKp5oOh5jJ6tcjpaRLA',
+    appId: '1:1076409384850:web:b28da0097e90ca118ccb4b',
+    messagingSenderId: '1076409384850',
+    projectId: 'tailsgram-dccf7',
+    authDomain: 'tailsgram-dccf7.firebaseapp.com',
+    storageBucket: 'tailsgram-dccf7.firebasestorage.app',
+  );
+
 }
