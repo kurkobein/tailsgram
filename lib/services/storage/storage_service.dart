@@ -27,14 +27,39 @@ class StorageService {
         String rawName = pickedFile.files.first.name;
         String cleanName = sanitizeFileName(rawName);
         final uid = FirebaseAuth.instance.currentUser?.uid;
-        String path = 'images/$uid/$cleanName';
-        await supabase.storage.from('publicaciones').upload(path, file);
+        String folderPath = 'publicaciones/$uid';
+        String finalName = await _getUniqueFileName(folderPath, cleanName);
+        String fullPath = '$folderPath/$finalName';
+        await supabase.storage.from('imagenes').upload(fullPath, file);
 
-        print('Imagen subida: $path');
+        print('Imagen subida: $fullPath');
 
       } catch (e) {
         print('Error al seleccionar la imagen: $e');
       }
     }
+  }
+
+  Future<String> _getUniqueFileName(String folder, String fileName) async {
+    final storage = supabase.storage.from('imagenes');
+    final existingFiles = await storage.list(path: folder);
+
+    final base = fileName.contains('.')
+        ? fileName.substring(0, fileName.lastIndexOf('.'))
+        : fileName;
+    final extension = fileName.contains('.')
+        ? fileName.substring(fileName.lastIndexOf('.'))
+        : '';
+
+    String name = fileName;
+    int count = 1;
+
+    final names = existingFiles.map((f) => f.name).toSet();
+    while (names.contains(name)) {
+      name = '$base($count)$extension';
+      count++;
+    }
+
+    return name;
   }
 }
