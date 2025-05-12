@@ -4,7 +4,6 @@ import '../pages/search_page.dart';
 import '../pages/add_page.dart';
 import '../pages/map_page.dart';
 import '../pages/calendario_page.dart';
-import '../pages/profile_page.dart';
 import '../import.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const PaginaSubir(),
     const PaginaMapa(),
     const PaginaCalendario(),
-    const PaginaPerfil(),
+    const PerfilScreen(),
     const MascotaFormScreen()
   ];
 

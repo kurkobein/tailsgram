@@ -15,7 +15,6 @@ Future<void> main() async {
       );
     }
   } catch (e) {
-    // Evita que la app crashee si Firebase ya fue inicializado
     debugPrint('Firebase ya estaba inicializado: $e');
   }
 
@@ -29,7 +28,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: FirebaseAuth.instance.currentUser == null ? '/sign-in' : '/home',
+      initialRoute: FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
       routes: AppRoutes.routes,
     );
   }
