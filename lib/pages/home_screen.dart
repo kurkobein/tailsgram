@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int paginaActual = 0;
 
   final List<Widget> paginas = [
-    const PaginaHome(),
+    const ListaPublicaciones(),
     const PaginaBuscar(),
     const PaginaSubir(),
     const PaginaMapa(),
