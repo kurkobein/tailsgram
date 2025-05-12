@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tailsgram/services/storage/storage_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,9 +47,14 @@ class _PaginaSubirState extends State<PaginaSubir> {
         throw Exception('No se pudo subir la imagen');
       }
 
+      final user = FirebaseAuth.instance.currentUser;
+      final nombreUsuario = user?.displayName ?? 'Error nombre';
+
       await FirebaseFirestore.instance.collection('publicaciones').add({
         'texto': texto,
         'imagenUrl': imageUrl,
+        'uid': user?.uid,
+        'nombreUsuario': nombreUsuario,
         'fecha': Timestamp.now(),
       });
 

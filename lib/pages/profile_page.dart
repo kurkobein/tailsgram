@@ -1,9 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class PaginaPerfil extends StatelessWidget {
+class PaginaPerfil extends StatefulWidget {
   const PaginaPerfil({super.key});
 
+  @override
+  State<PaginaPerfil> createState() => _PaginaPerfilState();
+}
+
+class _PaginaPerfilState extends State<PaginaPerfil> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -16,10 +22,22 @@ class PaginaPerfil extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Correo: ${user?.email ?? "No disponible"}'),
             const SizedBox(height: 10),
-            Text('Nombre: ${user?.displayName ?? "No establecido"}'),
+            Row(
+              children: [
+                Expanded(
+                  child: Text('Nombre: ${user?.displayName ?? "No establecido"}'),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  tooltip: 'Editar nombre',
+                  onPressed: () => _editarNombre(context),
+                ),
+              ],
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
@@ -38,6 +56,52 @@ class PaginaPerfil extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _editarNombre(BuildContext context) async {
+    final user = FirebaseAuth.instance.currentUser;
+    final TextEditingController nombreController =
+        TextEditingController(text: user?.displayName ?? '');
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Editar nombre'),
+        content: TextField(
+          controller: nombreController,
+          decoration: const InputDecoration(labelText: 'Nuevo nombre'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final nuevoNombre = nombreController.text.trim();
+              if (nuevoNombre.isNotEmpty) {
+                await user?.updateDisplayName(nuevoNombre);
+                await user?.reload();
+
+                // 🔄 Actualizar nombre en publicaciones
+                final publicaciones = await FirebaseFirestore.instance
+                    .collection('publicaciones')
+                    .where('uid', isEqualTo: user?.uid)
+                    .get();
+
+                for (final doc in publicaciones.docs) {
+                  await doc.reference.update({'nombreUsuario': nuevoNombre});
+                }
+
+                setState(() {}); // Refresca la pantalla
+              }
+              Navigator.pop(context);
+            },
+            child: const Text('Guardar'),
+          ),
+        ],
       ),
     );
   }
@@ -103,6 +167,4 @@ class PaginaPerfil extends StatelessWidget {
       ),
     );
   }
-
-
 }
