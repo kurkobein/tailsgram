@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../pages/home_page.dart';
 import '../pages/search_page.dart';
-import '../pages/add_page.dart';
+import 'posts_page.dart';
 import '../pages/map_page.dart';
 import '../pages/calendario_page.dart';
 import '../import.dart';
@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int paginaActual = 0;
 
   final List<Widget> paginas = [
-    const PaginaHome(),
+    const ListaPublicaciones(),
     const PaginaBuscar(),
     const PaginaSubir(),
     const PaginaMapa(),
