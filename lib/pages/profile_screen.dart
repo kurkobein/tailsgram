@@ -58,7 +58,10 @@ class _PerfilScreenState extends State<PerfilScreen> {
     if (_cargando) return const Center(child: CircularProgressIndicator());
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Mi perfil')),
+      appBar: AppBar(
+        title: const Text('Publicaciones'),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -120,15 +123,36 @@ class _PerfilScreenState extends State<PerfilScreen> {
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
                                                 foregroundColor:Colors.white),
                 onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
                   Navigator.pushReplacementNamed(context, '/mascota-form');
                 },
                 child: const Text('Agregar mascotas'),
                 
               ),
+              
                 ],
               
-              )
+              ),
+              Row(children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
+                                                foregroundColor:Colors.white),
+                onPressed: () async {
+                  Navigator.pushReplacementNamed(context, '/home');
+                },
+                child: const Text('atras'),
+                
+                
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
+                                                foregroundColor:Colors.white),
+                onPressed: () async {
+                  Navigator.pushReplacementNamed(context, '/mascota-list');
+                },
+                child: const Text('lista_mascotas'),
+                
+              ),
+            ])
             ],
           ),
         ),

@@ -22,7 +22,7 @@ class _MascotaFormState extends State<MascotaForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: ListView(
+      child: Column(
         children: [
           TextFormField(
             controller: _nombreController,
@@ -70,7 +70,7 @@ class _MascotaFormState extends State<MascotaForm> {
                   descripcion: _descripcionController.text,
                   imagenUrl: _imagenUrlController.text,
                 );
-                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/mascota-list');
               }
             },
             child: const Text('Guardar'),

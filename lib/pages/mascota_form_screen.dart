@@ -7,11 +7,17 @@ class MascotaFormScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Registrar Mascota'),
-      automaticallyImplyLeading: true,),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: MascotaForm(),
+      appBar: AppBar(
+        title: const Text('Publicaciones'),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView( // 🔁 permite scroll si el contenido es muy alto
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: const [
+            MascotaForm(),
+          ],
+        ),
       ),
     );
   }
