@@ -29,7 +29,14 @@ class _PerfilScreenState extends State<PerfilScreen> {
 
   Future<void> _cargarDatosUsuario() async {
     final doc = await usuarioRef.get();
-    final data = doc.data() as Map<String, dynamic>;
+
+    if (!doc.exists || doc.data() == null) {
+      // Maneja el caso cuando no hay datos
+      setState(() => _cargando = false);
+      return;
+    }
+
+    final data = doc.data()! as Map<String, dynamic>;
 
     _nombreController.text = data['nombre'] ?? '';
     _apellidoController.text = data['apellido'] ?? '';
@@ -38,6 +45,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
 
     setState(() => _cargando = false);
   }
+
 
   Future<void> _guardarCambios() async {
     if (_formKey.currentState!.validate()) {

@@ -14,8 +14,13 @@ class ListaPublicaciones extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Publicaciones'),
+        title: Image.asset(
+          'assets/images/logo.png',
+          fit: BoxFit.cover,
+          height: 35,
+        ),
         centerTitle: true,
+        backgroundColor: const Color.fromARGB(255, 198, 241, 214),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
