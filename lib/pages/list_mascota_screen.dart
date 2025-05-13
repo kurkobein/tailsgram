@@ -13,7 +13,15 @@ class MascotaListScreen extends StatelessWidget {
         .where('duenioId', isEqualTo: uid);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Mis Mascotas')),
+      appBar: AppBar(
+        title: const Text('Mis Mascotas'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -65,6 +73,19 @@ class MascotaListScreen extends StatelessWidget {
                 
               ),
           ),*/
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromRGBO(255, 107, 129, 1),
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/mascota-form');
+              },
+              child: const Text('Registrar nueva mascota'),
+            ),
+          ),
         ],
       ),
     );

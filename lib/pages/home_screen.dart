@@ -21,8 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const PaginaSubir(),
     const PaginaMapa(),
     const PaginaCalendario(),
-    const PerfilScreen(),
-    const MascotaFormScreen()
+    const PerfilScreen()
   ];
 
   @override
@@ -67,12 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.person_outline, size: 35),
             activeIcon: Icon(Icons.person, size: 35),
             label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline, size: 35),
-            activeIcon: Icon(Icons.person, size: 35),
-            label: '',
-          ),
+          )
         ],
       ),
     );

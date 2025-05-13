@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tailsgram/widgets/info_perfil_widget.dart';
 
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({super.key});
@@ -46,123 +47,91 @@ class _PerfilScreenState extends State<PerfilScreen> {
     setState(() => _cargando = false);
   }
 
-
-  Future<void> _guardarCambios() async {
-    if (_formKey.currentState!.validate()) {
-      await usuarioRef.update({
-        'nombre': _nombreController.text.trim(),
-        'apellido': _apellidoController.text.trim(),
-        'telefono': _telefonoController.text.trim(),
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Perfil actualizado')),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_cargando) return const Center(child: CircularProgressIndicator());
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Publicaciones'),
-        centerTitle: true,
+      backgroundColor: const Color.fromARGB(255, 198, 241, 214),
+      automaticallyImplyLeading: false,
+      flexibleSpace: SafeArea(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Nombre alineado a la izquierda
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    _nombreController.text.isNotEmpty ? _nombreController.text : 'Nombre',
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+            ),
+            // Logo centrado
+            Center(
+              child: Image.asset(
+                'assets/images/logo.png',
+                height: 35,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ],
+        ),
       ),
+    ),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: _nombreController,
-                decoration: const InputDecoration(labelText: 'Nombre'),
-                validator: (value) =>
-                    value!.isEmpty ? 'Campo requerido' : null,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    //AQUI DEBE IR LA FOTO DEL USUARIO🔥🔥🔥🔥🔥
+                    CircleAvatar(
+                      radius: 25,
+                        backgroundColor: Colors.grey,
+                        child: Text(_nombreController.text.isNotEmpty ? _nombreController.text[0].toUpperCase() : '', style: const TextStyle(color: Colors.white)),
+                      ),
+                      SizedBox(width: 15),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(_nombreController.text.isNotEmpty ? _nombreController.text : 'Nombre', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 5),
+                        Informacion(),
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
+            Container(
+              height: 150,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Color(0xFFD8D8D8)),
+                color: const Color(0xFFEFFDF5)
               ),
-              TextFormField(
-                controller: _apellidoController,
-                decoration: const InputDecoration(labelText: 'Apellido'),
-                validator: (value) =>
-                    value!.isEmpty ? 'Campo requerido' : null,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: TextField(
+                  controller: _nombreController,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    labelStyle: TextStyle(fontSize: 10)
+                  ),
+                  
+                  
+                ),
               ),
-              TextFormField(
-                controller: _correoController,
-                decoration: const InputDecoration(labelText: 'Correo'),
-                enabled: false, // 🔒 solo lectura
-              ),
-              TextFormField(
-                controller: _telefonoController,
-                decoration: const InputDecoration(labelText: 'Teléfono'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: const Color.fromRGBO(255, 107, 129, 1),
-                                                foregroundColor:Colors.white),
-                onPressed: _guardarCambios,
-                child: const Text('Guardar cambios'),
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
-                                                foregroundColor:Colors.white),
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.pushReplacementNamed(context, '/login');
-                },
-                child: const Text('Cerrar sesión'),
-                
-              ),
-              Row(
-                children: [
-                  ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
-                                                foregroundColor:Colors.white),
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.pushReplacementNamed(context, '/login');
-                },
-                child: const Text('Cerrar sesión'),
-                
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
-                                                foregroundColor:Colors.white),
-                onPressed: () async {
-                  Navigator.pushReplacementNamed(context, '/mascota-form');
-                },
-                child: const Text('Agregar mascotas'),
-                
-              ),
-              
-                ],
-              
-              ),
-              Row(children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
-                                                foregroundColor:Colors.white),
-                onPressed: () async {
-                  Navigator.pushReplacementNamed(context, '/home');
-                },
-                child: const Text('atras'),
-                
-                
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
-                                                foregroundColor:Colors.white),
-                onPressed: () async {
-                  Navigator.pushReplacementNamed(context, '/mascota-list');
-                },
-                child: const Text('lista_mascotas'),
-                
-              ),
-            ])
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

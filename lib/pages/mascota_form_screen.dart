@@ -8,8 +8,14 @@ class MascotaFormScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Publicaciones'),
+        title: const Text('Registro de mascota'),
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: SingleChildScrollView( // 🔁 permite scroll si el contenido es muy alto
         padding: const EdgeInsets.all(16.0),

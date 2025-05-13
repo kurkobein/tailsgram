@@ -36,6 +36,13 @@ class post extends StatelessWidget {
                 ],
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 0, 14, 15), // ← izquierda, arriba, derecha, abajo
+              child: Text(
+                texto,
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
             if (imagenUrl.isNotEmpty)
               ConstrainedBox(
                 constraints: BoxConstraints(
@@ -59,13 +66,6 @@ class post extends StatelessWidget {
                   onPressed: () {},
                 ),
               ],
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 14, 15), // ← izquierda, arriba, derecha, abajo
-              child: Text(
-                texto,
-                style: const TextStyle(fontSize: 16),
-              ),
             ),
           ],
         ),
