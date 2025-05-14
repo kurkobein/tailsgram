@@ -12,6 +12,7 @@ class RegistroScreen extends StatefulWidget {
 class _RegistroScreenState extends State<RegistroScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  final _usuarioController = TextEditingController();
   final _nombreController = TextEditingController();
   final _apellidoController = TextEditingController();
   final _correoController = TextEditingController();
@@ -37,6 +38,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
         // Guardar datos adicionales en Firestore
         await FirebaseFirestore.instance.collection('usuarios').doc(uid).set({
+          'usuario': _usuarioController.text.trim(),
           'nombre': _nombreController.text.trim(),
           'apellido': _apellidoController.text.trim(),
           'email': _correoController.text.trim(),
@@ -68,6 +70,12 @@ class _RegistroScreenState extends State<RegistroScreen> {
                 key: _formKey,
                 child: ListView(
                   children: [
+                    TextFormField(
+                      controller: _usuarioController,
+                      decoration: const InputDecoration(labelText: 'Usuario'),
+                      validator: (value) =>
+                          value!.isEmpty ? 'Campo requerido' : null,
+                    ),
                     TextFormField(
                       controller: _nombreController,
                       decoration: const InputDecoration(labelText: 'Nombre'),

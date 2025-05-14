@@ -6,7 +6,6 @@ import 'app_routes.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-
 Future<void> main() async {
 
   await Supabase.initialize(

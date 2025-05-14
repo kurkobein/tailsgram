@@ -11,6 +11,7 @@ class ConfiguracionPerfil extends StatefulWidget {
 
 class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
   final _formKey = GlobalKey<FormState>();
+  final _usuarioController = TextEditingController();
   final _nombreController = TextEditingController();
   final _apellidoController = TextEditingController();
   final _telefonoController = TextEditingController();
@@ -38,6 +39,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
 
     final data = doc.data()! as Map<String, dynamic>;
 
+    _usuarioController.text = data['usuario'] ?? '';
     _nombreController.text = data['nombre'] ?? '';
     _apellidoController.text = data['apellido'] ?? '';
     _telefonoController.text = data['telefono'] ?? '';
@@ -50,6 +52,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
   Future<void> _guardarCambios() async {
     if (_formKey.currentState!.validate()) {
       await usuarioRef.set({
+        'usuario': _usuarioController.text.trim(),
         'nombre': _nombreController.text.trim(),
         'apellido': _apellidoController.text.trim(),
         'telefono': _telefonoController.text.trim(),
@@ -77,6 +80,12 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
           key: _formKey,
           child: ListView(
             children: [
+              TextFormField(
+                controller: _usuarioController,
+                decoration: const InputDecoration(labelText: 'usuario'),
+                validator: (value) =>
+                    value!.isEmpty ? 'Campo requerido' : null,
+              ),
               TextFormField(
                 controller: _nombreController,
                 decoration: const InputDecoration(labelText: 'Nombre'),
