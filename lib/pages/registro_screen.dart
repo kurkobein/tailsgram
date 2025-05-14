@@ -44,6 +44,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
           'email': _correoController.text.trim(),
           'telefono': _telefonoController.text.trim(),
           'fechaRegistro': FieldValue.serverTimestamp(),
+          'descripcion': '',
         });
 
         // Redirigir al home o perfil

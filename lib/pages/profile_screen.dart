@@ -15,6 +15,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
   final _nombreController = TextEditingController();
   final _apellidoController = TextEditingController();
   final _telefonoController = TextEditingController();
+  final _descripcionController = TextEditingController();
   final _correoController = TextEditingController();
 
   bool _cargando = true;
@@ -42,6 +43,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
     _nombreController.text = data['nombre'] ?? '';
     _apellidoController.text = data['apellido'] ?? '';
     _telefonoController.text = data['telefono'] ?? '';
+    _descripcionController.text = data['descripcion'] ?? '';
     _correoController.text = FirebaseAuth.instance.currentUser?.email ?? '';
 
     setState(() => _cargando = false);
@@ -113,24 +115,27 @@ class _PerfilScreenState extends State<PerfilScreen> {
             ),
             Container(
               height: 150,
+              width: double.infinity, // Este hace que el contenedor ocupe todo el ancho disponible
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Color(0xFFD8D8D8)),
-                color: const Color(0xFFEFFDF5)
+                color: const Color(0xFFEFFDF5),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: TextField(
-                  controller: _nombreController,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    labelStyle: TextStyle(fontSize: 10)
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  width: double.infinity, // Esto hace que el Text ocupe todo el ancho disponible dentro del padding
+                  child: Text(
+                    _descripcionController.text,
+                    style: TextStyle(fontSize: 14),
+                    textAlign: TextAlign.left, // o center, justify, right según lo que quieras
+                    maxLines: null, // Permite múltiples líneas si el texto es largo
+                    overflow: TextOverflow.visible,
                   ),
-                  
-                  
                 ),
               ),
             ),
+
           ],
         ),
       ),

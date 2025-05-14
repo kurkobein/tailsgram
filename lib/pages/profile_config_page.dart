@@ -15,6 +15,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
   final _nombreController = TextEditingController();
   final _apellidoController = TextEditingController();
   final _telefonoController = TextEditingController();
+  final _descripcionController = TextEditingController();
   final _correoController = TextEditingController();
 
   bool _cargando = true;
@@ -43,6 +44,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
     _nombreController.text = data['nombre'] ?? '';
     _apellidoController.text = data['apellido'] ?? '';
     _telefonoController.text = data['telefono'] ?? '';
+    _descripcionController.text = data['descripcion'] ?? '';
     _correoController.text = FirebaseAuth.instance.currentUser?.email ?? '';
 
     setState(() => _cargando = false);
@@ -56,6 +58,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
         'nombre': _nombreController.text.trim(),
         'apellido': _apellidoController.text.trim(),
         'telefono': _telefonoController.text.trim(),
+        'descripcion': _descripcionController.text.trim(),
       }, SetOptions(merge: true)); // 👈 esto evita el error
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -107,6 +110,10 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
                 controller: _telefonoController,
                 decoration: const InputDecoration(labelText: 'Teléfono'),
               ),
+              TextFormField(
+                controller: _descripcionController,
+                decoration: const InputDecoration(labelText: 'Descripción'),
+              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: const Color.fromRGBO(255, 107, 129, 1),
@@ -142,16 +149,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
               
               ),
               Row(children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
-                                                foregroundColor:Colors.white),
-                onPressed: () async {
-                  Navigator.pushReplacementNamed(context, '/home');
-                },
-                child: const Text('atras'),
                 
-                
-              ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
                                                 foregroundColor:Colors.white),
