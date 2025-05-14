@@ -33,7 +33,6 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
     final doc = await usuarioRef.get();
 
     if (!doc.exists || doc.data() == null) {
-      // Maneja el caso cuando no hay datos
       setState(() => _cargando = false);
       return;
     }
@@ -50,7 +49,6 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
     setState(() => _cargando = false);
   }
 
-
   Future<void> _guardarCambios() async {
     if (_formKey.currentState!.validate()) {
       await usuarioRef.set({
@@ -59,7 +57,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
         'apellido': _apellidoController.text.trim(),
         'telefono': _telefonoController.text.trim(),
         'descripcion': _descripcionController.text.trim(),
-      }, SetOptions(merge: true)); // 👈 esto evita el error
+      }, SetOptions(merge: true));
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Perfil actualizado')),
@@ -67,99 +65,124 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
     }
   }
 
+  InputDecoration _decoracion(String label) => InputDecoration(
+        labelText: label,
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      );
 
   @override
   Widget build(BuildContext context) {
     if (_cargando) return const Center(child: CircularProgressIndicator());
 
     return Scaffold(
+      backgroundColor: const Color(0xFFC5F3D6),
       appBar: AppBar(
         title: const Text('Ajustes de perfil'),
         centerTitle: true,
+        backgroundColor: const Color(0xFFAAF0D1),
+        elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
         child: Form(
           key: _formKey,
           child: ListView(
             children: [
               TextFormField(
                 controller: _usuarioController,
-                decoration: const InputDecoration(labelText: 'usuario'),
+                decoration: _decoracion('Usuario'),
                 validator: (value) =>
                     value!.isEmpty ? 'Campo requerido' : null,
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _nombreController,
-                decoration: const InputDecoration(labelText: 'Nombre'),
+                decoration: _decoracion('Nombre'),
                 validator: (value) =>
                     value!.isEmpty ? 'Campo requerido' : null,
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _apellidoController,
-                decoration: const InputDecoration(labelText: 'Apellido'),
+                decoration: _decoracion('Apellido'),
                 validator: (value) =>
                     value!.isEmpty ? 'Campo requerido' : null,
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _correoController,
-                decoration: const InputDecoration(labelText: 'Correo'),
-                enabled: false, // 🔒 solo lectura
+                decoration: _decoracion('Correo'),
+                enabled: false,
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _telefonoController,
-                decoration: const InputDecoration(labelText: 'Teléfono'),
+                decoration: _decoracion('Teléfono'),
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _descripcionController,
-                decoration: const InputDecoration(labelText: 'Descripción'),
+                decoration: _decoracion('Descripción'),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: const Color.fromRGBO(255, 107, 129, 1),
-                                                foregroundColor:Colors.white),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFF6B81),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                ),
                 onPressed: _guardarCambios,
-                child: const Text('Guardar cambios'),
+                child: const Text('Guardar cambios', style: TextStyle(fontSize: 16)),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
-                                                foregroundColor:Colors.white),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                ),
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
                   Navigator.pushReplacementNamed(context, '/login');
                 },
-                child: const Text('Cerrar sesión'),
-                
+                child: const Text('Cerrar sesión', style: TextStyle(fontSize: 16)),
               ),
-              Row(
-                children: [
+              const SizedBox(height: 20),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
-                                                foregroundColor:Colors.white),
-                onPressed: () async {
+                onPressed: () {
                   Navigator.pushNamed(context, '/mascota-form');
-
                 },
-                child: const Text('Agregar mascotas'),
-                
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: const Text('Agregar mascota'),
               ),
-              
-                ],
-              
-              ),
-              Row(children: [
-                
+              const SizedBox(height: 10),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
-                                                foregroundColor:Colors.white),
-                onPressed: () async {
+                onPressed: () {
                   Navigator.pushNamed(context, '/mascota-list');
                 },
-                child: const Text('lista_mascotas'),
-                
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal.shade700,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: const Text('Lista de mascotas'),
               ),
-            ])
             ],
           ),
         ),

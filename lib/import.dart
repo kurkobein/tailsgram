@@ -5,3 +5,4 @@ export 'pages/detalle_mascota_screen.dart';
 export 'pages/registro_screen.dart';
 export 'pages/login_screen.dart';
 export 'pages/profile_screen.dart';
+export 'pages/mascota_edit_screen.dart';

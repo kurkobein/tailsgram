@@ -11,8 +11,6 @@ class RegistroScreen extends StatefulWidget {
 
 class _RegistroScreenState extends State<RegistroScreen> {
   final _formKey = GlobalKey<FormState>();
-
-  final _usuarioController = TextEditingController();
   final _nombreController = TextEditingController();
   final _apellidoController = TextEditingController();
   final _correoController = TextEditingController();
@@ -27,7 +25,6 @@ class _RegistroScreenState extends State<RegistroScreen> {
       setState(() => _cargando = true);
 
       try {
-        // Crear usuario en Firebase Auth
         final credenciales = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
               email: _correoController.text.trim(),
@@ -36,18 +33,14 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
         final uid = credenciales.user!.uid;
 
-        // Guardar datos adicionales en Firestore
         await FirebaseFirestore.instance.collection('usuarios').doc(uid).set({
-          'usuario': _usuarioController.text.trim(),
           'nombre': _nombreController.text.trim(),
           'apellido': _apellidoController.text.trim(),
           'email': _correoController.text.trim(),
           'telefono': _telefonoController.text.trim(),
           'fechaRegistro': FieldValue.serverTimestamp(),
-          'descripcion': '',
         });
 
-        // Redirigir al home o perfil
         Navigator.pushReplacementNamed(context, '/home');
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -59,73 +52,108 @@ class _RegistroScreenState extends State<RegistroScreen> {
     }
   }
 
+  InputDecoration _decoracion(String label) => InputDecoration(
+        hintText: label,
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Registro de Usuario')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: _cargando
-            ? const Center(child: CircularProgressIndicator())
-            : Form(
-                key: _formKey,
-                child: ListView(
-                  children: [
-                    TextFormField(
-                      controller: _usuarioController,
-                      decoration: const InputDecoration(labelText: 'Usuario'),
-                      validator: (value) =>
-                          value!.isEmpty ? 'Campo requerido' : null,
-                    ),
-                    TextFormField(
-                      controller: _nombreController,
-                      decoration: const InputDecoration(labelText: 'Nombre'),
-                      validator: (value) =>
-                          value!.isEmpty ? 'Campo requerido' : null,
-                    ),
-                    TextFormField(
-                      controller: _apellidoController,
-                      decoration: const InputDecoration(labelText: 'Apellido'),
-                      validator: (value) =>
-                          value!.isEmpty ? 'Campo requerido' : null,
-                    ),
-                    TextFormField(
-                      controller: _correoController,
-                      decoration: const InputDecoration(labelText: 'Correo'),
-                      validator: (value) =>
-                          value!.isEmpty ? 'Campo requerido' : null,
-                    ),
-                    TextFormField(
-                      controller: _telefonoController,
-                      decoration: const InputDecoration(labelText: 'Teléfono'),
-                      keyboardType: TextInputType.phone,
-                    ),
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration:
-                          const InputDecoration(labelText: 'Contraseña'),
-                      validator: (value) =>
-                          value!.length < 6 ? 'Mínimo 6 caracteres' : null,
-                    ),
-                    TextFormField(
-                      controller: _confirmarPasswordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          labelText: 'Confirmar contraseña'),
-                      validator: (value) =>
-                          value != _passwordController.text
-                              ? 'Las contraseñas no coinciden'
-                              : null,
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _registrarUsuario,
-                      child: const Text('Registrarse'),
-                    ),
-                  ],
+      backgroundColor: const Color(0xFFC5F3D6), 
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
+          child: _cargando
+              ? const Center(child: CircularProgressIndicator())
+              : Form(
+                  key: _formKey,
+                  child: ListView(
+                    children: [
+                      const SizedBox(height: 20),
+                      Center(
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                          height: 100,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Center(
+                        child: Text(
+                          'Ingresa tus datos',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      TextFormField(
+                        controller: _nombreController,
+                        decoration: _decoracion('Nombre'),
+                        validator: (value) =>
+                            value!.isEmpty ? 'Campo requerido' : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _apellidoController,
+                        decoration: _decoracion('Apellido'),
+                        validator: (value) =>
+                            value!.isEmpty ? 'Campo requerido' : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _correoController,
+                        decoration: _decoracion('Ingrese su correo electronico'),
+                        validator: (value) =>
+                            value!.isEmpty ? 'Campo requerido' : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _telefonoController,
+                        decoration: _decoracion('Teléfono'),
+                        keyboardType: TextInputType.phone,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: _decoracion('Ingrese su Contraseña'),
+                        validator: (value) =>
+                            value!.length < 6 ? 'Mínimo 6 caracteres' : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _confirmarPasswordController,
+                        obscureText: true,
+                        decoration: _decoracion('Reingrese su Contraseña'),
+                        validator: (value) =>
+                            value != _passwordController.text
+                                ? 'Las contraseñas no coinciden'
+                                : null,
+                      ),
+                      const SizedBox(height: 30),
+                      ElevatedButton(
+                        onPressed: _registrarUsuario,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFF6B81), 
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: const Text(
+                          'Ingresar',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+        ),
       ),
     );
   }

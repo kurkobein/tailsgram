@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
-import 'package:path/path.dart';
 import 'package:tailsgram/pages/profile_config_page.dart';
 import 'import.dart';
 
@@ -14,6 +13,7 @@ class AppRoutes {
     '/mascota-detalle': (context)=>const MascotaDetalleScreen(),
     '/perfil': (context)=>const PerfilScreen(),
     '/configuracion': (context)=>const ConfiguracionPerfil(),
-
+    '/mascota-detalle': (context) => const MascotaDetalleScreen(),
+    '/mascota-editar': (context) => const MascotaEditarScreen(),
   };
 }

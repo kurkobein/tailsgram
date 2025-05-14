@@ -13,17 +13,27 @@ class MascotaListScreen extends StatelessWidget {
         .where('duenioId', isEqualTo: uid);
 
     return Scaffold(
+      backgroundColor: const Color(0xFFC5F3D6), // fondo verde suave
       appBar: AppBar(
         title: const Text('Mis Mascotas'),
+        backgroundColor: const Color(0xFFAAF0D1),
+        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Column(
         children: [
+          const SizedBox(height: 16),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Tus mascotas registradas',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(height: 8),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: mascotasRef.snapshots(),
@@ -35,55 +45,68 @@ class MascotaListScreen extends StatelessWidget {
                 final docs = snapshot.data!.docs;
 
                 if (docs.isEmpty) {
-                  return const Center(child: Text('No tienes mascotas registradas.'));
+                  return const Center(
+                    child: Text('No tienes mascotas registradas.',
+                        style: TextStyle(fontSize: 16)),
+                  );
                 }
 
                 return ListView.builder(
+                  padding: const EdgeInsets.all(16),
                   itemCount: docs.length,
                   itemBuilder: (context, index) {
                     final mascota = docs[index].data() as Map<String, dynamic>;
 
-                    return ListTile(
-                      title: Text(mascota['nombre'] ?? 'Sin nombre'),
-                      subtitle: Text('Raza: ${mascota['raza'] ?? 'Desconocida'}'),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () {
-                        Navigator.pushReplacementNamed(
-                          context,
-                          '/mascota-detalle',
-                          arguments: docs[index],
-                        );
-                      },
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 3,
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 16),
+                        title: Text(
+                          mascota['nombre'] ?? 'Sin nombre',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        subtitle: Text(
+                          'Raza: ${mascota['raza'] ?? 'Desconocida'}',
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/mascota-detalle',
+                            arguments: docs[index],
+                          );
+                        },
+                      ),
                     );
                   },
                 );
               },
             ),
           ),
-          /*Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
-                                                foregroundColor:Colors.white),
-                onPressed: () async {
-                  Navigator.pushReplacementNamed(context, '/perfil');
-                },
-                child: const Text('atras'),
-                
-                
-              ),
-          ),*/
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromRGBO(255, 107, 129, 1),
-                foregroundColor: Colors.white,
-              ),
               onPressed: () {
                 Navigator.pushNamed(context, '/mascota-form');
               },
-              child: const Text('Registrar nueva mascota'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFF6B81), 
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                minimumSize: const Size.fromHeight(48),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+              ),
+              child: const Text('Registrar nueva mascota',
+                  style: TextStyle(fontSize: 16)),
             ),
           ),
         ],

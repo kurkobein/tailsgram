@@ -7,9 +7,12 @@ class MascotaFormScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFC5F3D6), 
       appBar: AppBar(
         title: const Text('Registro de mascota'),
         centerTitle: true,
+        backgroundColor: const Color(0xFFAAF0D1), 
+        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -17,10 +20,21 @@ class MascotaFormScreen extends StatelessWidget {
           },
         ),
       ),
-      body: SingleChildScrollView( // 🔁 permite scroll si el contenido es muy alto
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: const [
+            Text(
+              'Completa la información de tu mascota',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            SizedBox(height: 24),
             MascotaForm(),
           ],
         ),

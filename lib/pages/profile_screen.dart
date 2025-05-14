@@ -128,7 +128,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                   child: Text(
                     _descripcionController.text,
                     style: TextStyle(fontSize: 14),
-                    textAlign: TextAlign.left, // o center, justify, right según lo que quieras
+                    textAlign: TextAlign.left, 
                     maxLines: null, // Permite múltiples líneas si el texto es largo
                     overflow: TextOverflow.visible,
                   ),
