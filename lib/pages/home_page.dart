@@ -7,7 +7,7 @@ class ListaPublicaciones extends StatelessWidget {
 
   Future<String> _obtenerNombreUsuario(String uid) async {
     final doc = await FirebaseFirestore.instance.collection('usuarios').doc(uid).get();
-    return doc.exists ? (doc.data()?['nombre'] ?? 'Anónimo') : 'Anónimo';
+    return doc.exists ? (doc.data()?['usuario'] ?? 'Anónimo') : 'Anónimo';
   }
 
   @override

@@ -6,6 +6,7 @@ import 'import.dart';
 class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     '/login': (context) => const LoginScreen(),
+    '/sign-in': (context) => const LoginScreen(),
     '/registro': (context) => const RegistroScreen(),
     '/home': (context) => const HomeScreen(),
     '/mascota-form': (context) => const MascotaFormScreen(),
@@ -15,5 +16,6 @@ class AppRoutes {
     '/configuracion': (context)=>const ConfiguracionPerfil(),
     '/mascota-detalle': (context) => const MascotaDetalleScreen(),
     '/mascota-editar': (context) => const MascotaEditarScreen(),
+
   };
 }

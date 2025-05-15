@@ -183,9 +183,94 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
                 ),
                 child: const Text('Lista de mascotas'),
               ),
+              ElevatedButton(
+                onPressed: () {
+                  _mostrarDialogoConfirmacion(context);
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white,),
+                child: const Text('Eliminar cuenta'),
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+  void _mostrarDialogoConfirmacion(BuildContext context) {
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmar eliminación'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Ingresa tu correo y contraseña para eliminar tu cuenta.'),
+            const SizedBox(height: 10),
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(labelText: 'Correo'),
+            ),
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Contraseña'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            child: const Text('Cancelar'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          ElevatedButton(
+            child: const Text('Eliminar'),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () async {
+              final email = emailController.text.trim();
+              final password = passwordController.text;
+
+              try {
+                final credential = EmailAuthProvider.credential(
+                  email: email,
+                  password: password,
+                );
+
+                final user = FirebaseAuth.instance.currentUser;
+                await user?.reauthenticateWithCredential(credential);
+
+                // ✅ Eliminar publicaciones del usuario
+                final uid = user?.uid;
+                if (uid != null) {
+                  final publicaciones = await FirebaseFirestore.instance
+                      .collection('publicaciones')
+                      .where('uid', isEqualTo: uid)
+                      .get();
+
+                  for (final doc in publicaciones.docs) {
+                    await doc.reference.delete();
+                  }
+                }
+                
+                await FirebaseFirestore.instance.collection('usuarios').doc(uid).delete();
+                await user?.delete();
+
+                Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
+
+              } catch (e) {
+                print(e);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Error al eliminar la cuenta.'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }

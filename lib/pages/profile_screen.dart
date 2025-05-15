@@ -12,6 +12,7 @@ class PerfilScreen extends StatefulWidget {
 
 class _PerfilScreenState extends State<PerfilScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _usuarioController = TextEditingController(); 
   final _nombreController = TextEditingController();
   final _apellidoController = TextEditingController();
   final _telefonoController = TextEditingController();
@@ -40,6 +41,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
 
     final data = doc.data()! as Map<String, dynamic>;
 
+    _usuarioController.text = data['usuario'] ?? '';
     _nombreController.text = data['nombre'] ?? '';
     _apellidoController.text = data['apellido'] ?? '';
     _telefonoController.text = data['telefono'] ?? '';
@@ -60,13 +62,12 @@ class _PerfilScreenState extends State<PerfilScreen> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            // Nombre alineado a la izquierda
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    _nombreController.text.isNotEmpty ? _nombreController.text : 'Nombre',
+                    _usuarioController.text.isNotEmpty ? _usuarioController.text : 'Nombre',
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     overflow: TextOverflow.ellipsis,
                   ),
