@@ -19,7 +19,7 @@ class _BuscadorUsuariosState extends State<BuscadorUsuarios> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               decoration: InputDecoration(
-                labelText: 'Buscar por nombre',
+                labelText: 'Buscar por nombre de usuario',
                 border: OutlineInputBorder(),
               ),
               onChanged: (valor) {
@@ -45,7 +45,7 @@ class _BuscadorUsuariosState extends State<BuscadorUsuarios> {
                   itemBuilder: (context, index) {
                     final usuario = usuarios[index];
                     return ListTile(
-                      title: Text(usuario['nombre'] ?? 'Sin nombre'),
+                      title: Text(usuario['usuario'] ?? 'Sin usuario'),
                     );
                   },
                 );
@@ -63,8 +63,8 @@ class _BuscadorUsuariosState extends State<BuscadorUsuarios> {
     } else {
       return FirebaseFirestore.instance
           .collection('usuarios')
-          .where('nombre', isGreaterThanOrEqualTo: texto)
-          .where('nombre', isLessThan: texto + 'z')
+          .where('usuario', isGreaterThanOrEqualTo: texto)
+          .where('usuario', isLessThan: texto + 'z')
           .snapshots();
     }
   }
