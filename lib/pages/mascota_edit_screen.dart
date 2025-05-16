@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:tailsgram/services/storage/storage_foto_mascota.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/mascota_service.dart';
@@ -17,6 +20,9 @@ class _MascotaEditarScreenState extends State<MascotaEditarScreen> {
   final _descripcionController = TextEditingController();
   final _imagenUrlController = TextEditingController();
   String _genero = 'Macho';
+  File? _selectedImage;
+  String? _imageFileName;
+
 
   late DocumentSnapshot mascota;
 
@@ -34,7 +40,30 @@ class _MascotaEditarScreenState extends State<MascotaEditarScreen> {
     _genero = data['genero'] ?? 'Macho';
   }
 
+  Future<void> _seleccionarImagen() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+        _imageFileName = pickedFile.name;
+      });
+    }
+  }
+
+
   Future<void> _guardarCambios() async {
+    String? nuevaUrl = _imagenUrlController.text;
+
+    if (_selectedImage != null && _imageFileName != null) {
+      final urlSubida = await StorageService().subirImagenDesdeFile(
+        _selectedImage!,
+        _imageFileName!,
+      );
+      if (urlSubida != null) nuevaUrl = urlSubida;
+    }
+
     if (_formKey.currentState!.validate()) {
       await MascotaService().actualizarMascota(
         id: mascota.id,
@@ -43,8 +72,9 @@ class _MascotaEditarScreenState extends State<MascotaEditarScreen> {
         edad: int.parse(_edadController.text),
         genero: _genero,
         descripcion: _descripcionController.text,
-        imagenUrl: _imagenUrlController.text,
+        imagenUrl: nuevaUrl,
       );
+
 
       Navigator.pushReplacementNamed(context, '/mascota-list');
     }
@@ -136,10 +166,23 @@ class _MascotaEditarScreenState extends State<MascotaEditarScreen> {
                 decoration: _decoracion('Descripción'),
               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _imagenUrlController,
-                decoration: _decoracion('URL de imagen'),
+              if (_selectedImage != null)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.file(_selectedImage!, height: 100),
+                )
+              else if (_imagenUrlController.text.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.network(_imagenUrlController.text, height: 100),
+                ),
+
+              ElevatedButton.icon(
+                onPressed: _seleccionarImagen,
+                icon: const Icon(Icons.photo),
+                label: const Text('Seleccionar nueva imagen'),
               ),
+
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: _guardarCambios,

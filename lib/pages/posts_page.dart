@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tailsgram/services/storage/storage_service.dart';
+import 'package:tailsgram/services/storage/storage_image_post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailsgram/widgets/boton_estandar.dart';
 

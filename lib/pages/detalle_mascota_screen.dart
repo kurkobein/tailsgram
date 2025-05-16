@@ -34,6 +34,18 @@ class MascotaDetalleScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+              ),
+              child: Image.network(
+                data['imagenUrl'] ?? '',
+                width: 150,
+                fit: BoxFit.cover,
+                
+              ),
+            ),
             Text('Nombre:', style: _etiqueta()),
             Text(data['nombre'] ?? '', style: _valor()),
 

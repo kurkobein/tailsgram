@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:tailsgram/services/storage/storage_foto_usuario.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +20,9 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
   final _telefonoController = TextEditingController();
   final _descripcionController = TextEditingController();
   final _correoController = TextEditingController();
-
+  final _fotoController = TextEditingController();
+  File? _selectedImage;
+  String? _imageFileName;
   bool _cargando = true;
   late DocumentReference usuarioRef;
 
@@ -37,8 +42,22 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
       return;
     }
 
+  Future<void> _seleccionarImagen() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+        _imageFileName = pickedFile.name;
+      });
+    }
+  }
+
+
     final data = doc.data()! as Map<String, dynamic>;
 
+    _fotoController.text = data['fotoPerfilUrl'] ?? '';
     _usuarioController.text = data['usuario'] ?? '';
     _nombreController.text = data['nombre'] ?? '';
     _apellidoController.text = data['apellido'] ?? '';
@@ -49,7 +68,39 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
     setState(() => _cargando = false);
   }
 
+  Future<void> _seleccionarImagen() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+        _imageFileName = pickedFile.name;
+      });
+    }
+  }
+
+
   Future<void> _guardarCambios() async {
+    if (_selectedImage != null && _imageFileName != null) {
+      final url = await StorageServiceUsuario().subirImagenDesdeFile(
+        _selectedImage!,
+        _imageFileName!,
+      );
+
+      if (url != null) {
+        // Guarda la URL en Firestore
+        await FirebaseFirestore.instance
+            .collection('usuarios')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update({'fotoPerfilUrl': url});
+
+        setState(() {
+          _fotoController.text = url;
+          _selectedImage = null;
+        });
+      }
+    }
     if (_formKey.currentState!.validate()) {
       await usuarioRef.set({
         'usuario': _usuarioController.text.trim(),
@@ -57,6 +108,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
         'apellido': _apellidoController.text.trim(),
         'telefono': _telefonoController.text.trim(),
         'descripcion': _descripcionController.text.trim(),
+        'fotoPerfilUrl': _fotoController.text.trim(),
       }, SetOptions(merge: true));
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -90,6 +142,24 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
           key: _formKey,
           child: ListView(
             children: [
+              Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: _selectedImage != null
+                        ? FileImage(_selectedImage!)
+                        : (_fotoController.text.isNotEmpty
+                            ? NetworkImage(_fotoController.text)
+                            : const NetworkImage('https://example.com/default_avatar.png')) as ImageProvider,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.edit, color: Colors.black87),
+                    onPressed: _seleccionarImagen,
+                  ),
+                ],
+              ),
+
               TextFormField(
                 controller: _usuarioController,
                 decoration: _decoracion('Usuario'),

@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tailsgram/services/storage/storage_foto_usuario.dart';
 
 class RegistroScreen extends StatefulWidget {
   const RegistroScreen({super.key});
@@ -19,6 +21,19 @@ class _RegistroScreenState extends State<RegistroScreen> {
   final _confirmarPasswordController = TextEditingController();
 
   bool _cargando = false;
+  File? _selectedImage;
+  String? _imageFileName;
+
+  Future<void> _seleccionarImagen() async {
+    final result = await StorageServiceUsuario().seleccionarImagen();
+    if (result != null) {
+      setState(() {
+        _selectedImage = result.file;
+        _imageFileName = result.fileName;
+      });
+    }
+  }
+
 
   Future<void> _registrarUsuario() async {
     if (_formKey.currentState!.validate()) {
@@ -33,13 +48,22 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
         final uid = credenciales.user!.uid;
 
+        String? imagenUrl;
+        if (_selectedImage != null && _imageFileName != null) {
+          imagenUrl = await StorageServiceUsuario()
+              .subirImagenDesdeFile(_selectedImage!, _imageFileName!);
+        }
+
+
         await FirebaseFirestore.instance.collection('usuarios').doc(uid).set({
           'nombre': _nombreController.text.trim(),
           'apellido': _apellidoController.text.trim(),
           'email': _correoController.text.trim(),
           'telefono': _telefonoController.text.trim(),
           'fechaRegistro': FieldValue.serverTimestamp(),
+          'fotoPerfilUrl': imagenUrl ?? '',
         });
+
 
         Navigator.pushReplacementNamed(context, '/home');
       } catch (e) {
@@ -134,6 +158,13 @@ class _RegistroScreenState extends State<RegistroScreen> {
                                 ? 'Las contraseñas no coinciden'
                                 : null,
                       ),
+                      const SizedBox(height: 16),
+                      TextButton.icon(
+                        onPressed: _seleccionarImagen,
+                        icon: const Icon(Icons.photo),
+                        label: const Text('Seleccionar foto de perfil'),
+                      ),
+
                       const SizedBox(height: 30),
                       ElevatedButton(
                         onPressed: _registrarUsuario,

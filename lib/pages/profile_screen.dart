@@ -12,6 +12,7 @@ class PerfilScreen extends StatefulWidget {
 
 class _PerfilScreenState extends State<PerfilScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _fotoController = TextEditingController();
   final _usuarioController = TextEditingController(); 
   final _nombreController = TextEditingController();
   final _apellidoController = TextEditingController();
@@ -41,6 +42,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
 
     final data = doc.data()! as Map<String, dynamic>;
 
+    _fotoController.text = data['fotoPerfilUrl'] ?? '';
     _usuarioController.text = data['usuario'] ?? '';
     _nombreController.text = data['nombre'] ?? '';
     _apellidoController.text = data['apellido'] ?? '';
@@ -98,10 +100,12 @@ class _PerfilScreenState extends State<PerfilScreen> {
                     //AQUI DEBE IR LA FOTO DEL USUARIO🔥🔥🔥🔥🔥
                     CircleAvatar(
                       radius: 25,
-                        backgroundColor: Colors.grey,
-                        child: Text(_nombreController.text.isNotEmpty ? _nombreController.text[0].toUpperCase() : '', style: const TextStyle(color: Colors.white)),
-                      ),
-                      SizedBox(width: 15),
+                      backgroundColor: Colors.grey,
+                      backgroundImage: _fotoController.text.isNotEmpty
+                          ? NetworkImage(_fotoController.text)
+                          : null,    
+                    ),
+                    SizedBox(width: 15),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
