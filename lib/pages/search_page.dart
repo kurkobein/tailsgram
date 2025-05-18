@@ -46,7 +46,7 @@ class _BuscadorUsuariosState extends State<BuscadorUsuarios> {
                     final usuario = usuarios[index];
                     return ListTile(
                       leading: CircleAvatar(
-                        // backgroundImage: NetworkImage(usuario['fotoPerfilUrl'] ?? ''),
+                        backgroundImage: NetworkImage(usuario['fotoPerfilUrl'] ?? ''),
                       ),
                       title: Text(usuario['usuario'] ?? 'Sin usuario'),
                       subtitle: Text(usuario['nombre'] ?? ''),
