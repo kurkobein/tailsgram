@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:tailsgram/pages/profile_config_page.dart';
+import 'package:tailsgram/pages/perfil_usuario.dart';
 import 'import.dart';
 
 class AppRoutes {
@@ -10,12 +11,17 @@ class AppRoutes {
     '/registro': (context) => const RegistroScreen(),
     '/home': (context) => const HomeScreen(),
     '/mascota-form': (context) => const MascotaFormScreen(),
-    '/mascota-list': (context)=> const MascotaListScreen(),
+    '/mascota-list': (context) {
+      final args = ModalRoute.of(context)!.settings.arguments as String?;
+      return MascotaListScreen(uid: args);
+    },
+
     '/mascota-detalle': (context)=>const MascotaDetalleScreen(),
     '/perfil': (context)=>const PerfilScreen(),
     '/configuracion': (context)=>const ConfiguracionPerfil(),
     '/mascota-detalle': (context) => const MascotaDetalleScreen(),
     '/mascota-editar': (context) => const MascotaEditarScreen(),
+    '/perfil-usuario': (context) => const PerfilUsuarioScreen(),
 
   };
 }

@@ -3,19 +3,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MascotaListScreen extends StatelessWidget {
-  const MascotaListScreen({super.key});
+  final String? uid;
+  const MascotaListScreen({super.key, required this.uid});
 
   @override
   Widget build(BuildContext context) {
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final String usuarioId = uid ?? FirebaseAuth.instance.currentUser!.uid;
     final mascotasRef = FirebaseFirestore.instance
         .collection('mascotas')
-        .where('duenioId', isEqualTo: uid);
+        .where('duenioId', isEqualTo: usuarioId);
+    final bool esMiPerfil = usuarioId == FirebaseAuth.instance.currentUser!.uid;
+
 
     return Scaffold(
       backgroundColor: const Color(0xFFC5F3D6), // fondo verde suave
       appBar: AppBar(
-        title: const Text('Mis Mascotas'),
+        title: Text(esMiPerfil ? 'Mis Mascotas' : 'Mascotas del Usuario'),
         backgroundColor: const Color(0xFFAAF0D1),
         elevation: 0,
         leading: IconButton(
@@ -26,10 +29,12 @@ class MascotaListScreen extends StatelessWidget {
       body: Column(
         children: [
           const SizedBox(height: 16),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
-              'Tus mascotas registradas',
+              esMiPerfil
+                ? 'Tus mascotas registradas'
+                : 'Mascotas registradas de este usuario',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
@@ -90,25 +95,46 @@ class MascotaListScreen extends StatelessWidget {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/mascota-form');
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF6B81), 
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                minimumSize: const Size.fromHeight(48),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
+          if (esMiPerfil)
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/mascota-form');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFF6B81),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  minimumSize: const Size.fromHeight(48),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
                 ),
+                child: const Text('Registrar nueva mascota',
+                    style: TextStyle(fontSize: 16)),
               ),
-              child: const Text('Registrar nueva mascota',
-                  style: TextStyle(fontSize: 16)),
-            ),
-          ),
+          ) else
+            // Botón para seguir al usuario
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Lógica para seguir al usuario
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFF6B81),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  minimumSize: const Size.fromHeight(48),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                ),
+                child: const Text('Seguir usuario',
+                    style: TextStyle(fontSize: 16)),
+              ),
+            )
         ],
       ),
     );

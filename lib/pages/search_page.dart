@@ -45,8 +45,20 @@ class _BuscadorUsuariosState extends State<BuscadorUsuarios> {
                   itemBuilder: (context, index) {
                     final usuario = usuarios[index];
                     return ListTile(
+                      leading: CircleAvatar(
+                        // backgroundImage: NetworkImage(usuario['fotoPerfilUrl'] ?? ''),
+                      ),
                       title: Text(usuario['usuario'] ?? 'Sin usuario'),
+                      subtitle: Text(usuario['nombre'] ?? ''),
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/perfil-usuario',
+                          arguments: usuario.id,
+                        );
+                      },
                     );
+
                   },
                 );
               },

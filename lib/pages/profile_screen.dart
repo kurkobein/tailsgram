@@ -97,7 +97,6 @@ class _PerfilScreenState extends State<PerfilScreen> {
               children: [
                 Row(
                   children: [
-                    //AQUI DEBE IR LA FOTO DEL USUARIO🔥🔥🔥🔥🔥
                     CircleAvatar(
                       radius: 25,
                       backgroundColor: Colors.grey,
@@ -111,7 +110,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                       children: [
                         Text(_nombreController.text.isNotEmpty ? _nombreController.text : 'Nombre', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                         SizedBox(height: 5),
-                        Informacion(),
+                        Informacion(idPerfil: FirebaseAuth.instance.currentUser!.uid),
                       ],
                     )
                   ],
