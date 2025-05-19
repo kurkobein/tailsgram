@@ -4,11 +4,13 @@ class post extends StatelessWidget {
   final String imagenUrl;
   final String nombreUsuario;
   final String texto;
+  final String fotoPerfil;
   const post({
     super.key, 
     required this.imagenUrl, 
     required this.nombreUsuario, 
-    required this.texto
+    required this.texto,
+    required this.fotoPerfil,
   });
 
   @override
@@ -25,8 +27,7 @@ class post extends StatelessWidget {
               child: Row(
                 children: [
                   CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    child: Text(nombreUsuario[0].toUpperCase(), style: const TextStyle(color: Colors.white)),
+                    backgroundImage: NetworkImage(fotoPerfil),
                   ),
                   SizedBox(width: 10),
                   Text(

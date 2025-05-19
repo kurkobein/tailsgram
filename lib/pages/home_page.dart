@@ -34,10 +34,12 @@ class ListaPublicaciones extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
+
           final publicaciones = snapshot.data!.docs;
           if (publicaciones.isEmpty) {
             return const Center(child: Text('No hay publicaciones.'));
           }
+
           return ListView.builder(
             itemCount: publicaciones.length,
             itemBuilder: (context, index) {
@@ -46,15 +48,34 @@ class ListaPublicaciones extends StatelessWidget {
               final imagenUrl = doc['imagenUrl'] ?? '';
               final uid = doc['uid'] ?? '';
 
-              return FutureBuilder<String>(
-                future: _obtenerNombreUsuario(uid),
-                builder: (context, snapshotNombre) {
-                  final nombreUsuario = snapshotNombre.data ?? 'Cargando...';
+              // FUTUREBUILDER PARA TRAER DATOS DEL USUARIO
+              return FutureBuilder<DocumentSnapshot>(
+                future: FirebaseFirestore.instance
+                    .collection('usuarios')
+                    .doc(uid)
+                    .get(),
+                builder: (context, userSnapshot) {
+                  if (userSnapshot.connectionState == ConnectionState.waiting) {
+                    return const ListTile(title: Text('Cargando...'));
+                  }
 
+                  if (!userSnapshot.hasData || !userSnapshot.data!.exists) {
+                    return const ListTile(title: Text('Usuario no encontrado'));
+                  }
+
+                  final userData =
+                      userSnapshot.data!.data() as Map<String, dynamic>;
+
+                  final nombreUsuario = userData['usuario'] ?? 'Usuario';
+                  final fotoPerfilUrl = userData['fotoPerfilUrl'] ??
+                      'https://qehohrpghlqjkatoyqux.supabase.co/storage/v1/object/public/imagenes/fotos_defecto/default.png';
+
+                  // Aquí llamas al widget post como antes, pero con más datos
                   return post(
                     imagenUrl: imagenUrl,
                     nombreUsuario: nombreUsuario,
                     texto: texto,
+                    fotoPerfil: fotoPerfilUrl,
                   );
                 },
               );
@@ -62,6 +83,7 @@ class ListaPublicaciones extends StatelessWidget {
           );
         },
       ),
+
     );
   }
 }
