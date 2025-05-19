@@ -80,8 +80,34 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
     }
   }
 
+  Future<bool> usuarioExiste(String nombreusuario) async {
+    final uidActual = FirebaseAuth.instance.currentUser!.uid;
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection('usuarios')
+        .where('usuario', isEqualTo: nombreusuario)
+        .get();
+
+    for (var doc in snapshot.docs) {
+      if (doc.id != uidActual) {
+        return true; // Existe otro usuario con ese nombre
+      }
+    }
+    return false; // Solo existes tú, o no existe
+  }
+
 
   Future<void> _guardarCambios() async {
+    final nombreUsuario = _usuarioController.text.trim();
+    final existe = await usuarioExiste(nombreUsuario);
+
+    if (existe) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('El nombre de usuario ya está en uso')),
+      );
+      return;
+    }
+
     if (_selectedImage != null && _imageFileName != null) {
       final url = await StorageServiceUsuario().subirImagenDesdeFile(
         _selectedImage!,
@@ -89,21 +115,26 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
       );
 
       if (url != null) {
-        // Guarda la URL en Firestore
-        await FirebaseFirestore.instance
-            .collection('usuarios')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .update({'fotoPerfilUrl': url});
-
-        setState(() {
+        try {
+          await usuarioRef.set({
+            'fotoPerfilUrl': url,
+          }, SetOptions(merge: true));
           _fotoController.text = url;
-          _selectedImage = null;
-        });
+          setState(() {
+            _selectedImage = null;
+          });
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Error al subir la imagen')),
+          );
+          return;
+        }
       }
     }
+
     if (_formKey.currentState!.validate()) {
       await usuarioRef.set({
-        'usuario': _usuarioController.text.trim(),
+        'usuario': nombreUsuario,
         'nombre': _nombreController.text.trim(),
         'apellido': _apellidoController.text.trim(),
         'telefono': _telefonoController.text.trim(),
@@ -116,6 +147,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
       );
     }
   }
+
 
   InputDecoration _decoracion(String label) => InputDecoration(
         labelText: label,
