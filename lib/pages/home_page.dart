@@ -65,12 +65,12 @@ class ListaPublicaciones extends StatelessWidget {
                   final fotoPerfilUrl = userData['fotoPerfilUrl'] ??
                       'https://qehohrpghlqjkatoyqux.supabase.co/storage/v1/object/public/imagenes/fotos_defecto/default.png';
 
-                  // Aquí llamas al widget post como antes, pero con más datos
-                  return post(
+                  return Post(
                     imagenUrl: imagenUrl,
                     nombreUsuario: nombreUsuario,
                     texto: texto,
                     fotoPerfil: fotoPerfilUrl,
+                    postId: doc.id,
                   );
                 },
               );

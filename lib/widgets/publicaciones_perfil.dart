@@ -54,11 +54,12 @@ class ListaPublicacionesPerfil extends StatelessWidget {
                 final fotoPerfilUrl = userData['fotoPerfilUrl'] ??
                     'https://qehohrpghlqjkatoyqux.supabase.co/storage/v1/object/public/imagenes/fotos_defecto/default.png';
 
-                return post(
+                return Post(
                   imagenUrl: imagenUrl,
                   nombreUsuario: nombreUsuario,
                   texto: texto,
                   fotoPerfil: fotoPerfilUrl,
+                  postId: doc.id, // Asegúrate de pasar el ID del documento
                 );
               },
             );
