@@ -5,11 +5,6 @@ import 'package:tailsgram/widgets/publicaciones_widget.dart';
 class ListaPublicaciones extends StatelessWidget {
   const ListaPublicaciones({super.key});
 
-  Future<String> _obtenerNombreUsuario(String uid) async {
-    final doc = await FirebaseFirestore.instance.collection('usuarios').doc(uid).get();
-    return doc.exists ? (doc.data()?['usuario'] ?? 'Anónimo') : 'Anónimo';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +36,7 @@ class ListaPublicaciones extends StatelessWidget {
           }
 
           return ListView.builder(
+            physics: const BouncingScrollPhysics(),
             itemCount: publicaciones.length,
             itemBuilder: (context, index) {
               final doc = publicaciones[index];
@@ -48,7 +44,6 @@ class ListaPublicaciones extends StatelessWidget {
               final imagenUrl = doc['imagenUrl'] ?? '';
               final uid = doc['uid'] ?? '';
 
-              // FUTUREBUILDER PARA TRAER DATOS DEL USUARIO
               return FutureBuilder<DocumentSnapshot>(
                 future: FirebaseFirestore.instance
                     .collection('usuarios')
@@ -83,7 +78,6 @@ class ListaPublicaciones extends StatelessWidget {
           );
         },
       ),
-
     );
   }
 }
