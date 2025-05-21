@@ -19,6 +19,7 @@ dependencies:
   path: ^1.9.1
   image_picker: ^1.1.2
   file_picker: ^10.1.7
+  tcard: ^1.3.5
 
 dev_dependencies:
   flutter_test:

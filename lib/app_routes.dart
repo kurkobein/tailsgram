@@ -15,13 +15,11 @@ class AppRoutes {
       final args = ModalRoute.of(context)!.settings.arguments as String?;
       return MascotaListScreen(uid: args);
     },
-
     '/mascota-detalle': (context)=>const MascotaDetalleScreen(),
     '/perfil': (context)=>const PerfilScreen(),
     '/configuracion': (context)=>const ConfiguracionPerfil(),
     '/mascota-detalle': (context) => const MascotaDetalleScreen(),
     '/mascota-editar': (context) => const MascotaEditarScreen(),
     '/perfil-usuario': (context) => const PerfilUsuarioScreen(),
-
   };
 }
