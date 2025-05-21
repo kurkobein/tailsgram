@@ -84,7 +84,7 @@ class PerfilUsuarioScreen extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: Container(
+                    child: SizedBox(
                       width: double.infinity, // Esto hace que el Text ocupe todo el ancho disponible dentro del padding
                       child: Text(
                         data['descripcion'] ?? '',

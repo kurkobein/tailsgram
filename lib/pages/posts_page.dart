@@ -57,6 +57,7 @@ class _PaginaSubirState extends State<PaginaSubir> {
         'fecha': Timestamp.now(),
       });
 
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Publicación creada correctamente')),
       );
@@ -66,6 +67,7 @@ class _PaginaSubirState extends State<PaginaSubir> {
         _selectedImage = null;
       });
     } catch (e) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );

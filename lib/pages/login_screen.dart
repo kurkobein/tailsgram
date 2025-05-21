@@ -22,8 +22,10 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _correoController.text.trim(),
           password: _passwordController.text.trim(),
         );
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/home');
       } catch (e) {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error al iniciar sesión: ${e.toString()}')),
         );

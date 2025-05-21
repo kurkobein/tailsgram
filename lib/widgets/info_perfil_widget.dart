@@ -38,10 +38,10 @@ class _InformacionState extends State<Informacion> {
           return const Text("No se encontró el perfil.");
         }
 
-        final data = snapshot.data!.data() as Map<String, dynamic>;
-        final String idPerfil = snapshot.data!.id;
-        final String idUsuarioActual = FirebaseAuth.instance.currentUser!.uid;
-        print('estos son idUsuarioActual $idUsuarioActual e idPerfil $idPerfil');
+        // final data = snapshot.data!.data() as Map<String, dynamic>;
+        // final String idPerfil = snapshot.data!.id;
+        // final String idUsuarioActual = FirebaseAuth.instance.currentUser!.uid;
+        // print('estos son idUsuarioActual $idUsuarioActual e idPerfil $idPerfil');
 
         return Container(
           decoration: BoxDecoration(

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:path/path.dart' as p;
 
 String sanitizeFileName(String fileName) {
   return fileName.toLowerCase().replaceAll(RegExp(r'[^\w\-.]'), '_');
@@ -43,7 +42,6 @@ class StorageService {
       final imageUrl = supabase.storage.from('imagenes').getPublicUrl(fullPath);
       return imageUrl;
     } catch (e) {
-      print('Error al subir imagen: $e');
       return null;
     }
   }

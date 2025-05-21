@@ -27,7 +27,6 @@ class _PostState extends State<Post> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isLiked = false;
   int _likeCount = 0;
-  bool _loading = true;
 
   @override
   void initState() {
@@ -64,7 +63,6 @@ class _PostState extends State<Post> {
     if (mounted) {
       setState(() {
         _isLiked = likeDoc.exists;
-        _loading = false;
       });
     }
   }
@@ -74,7 +72,6 @@ class _PostState extends State<Post> {
     if (userId == null) return;
 
     setState(() {
-      _loading = true;
     });
 
     final likeRef = _firestore
@@ -97,65 +94,63 @@ class _PostState extends State<Post> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(widget.fotoPerfil),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    widget.nombreUsuario,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 14, 15),
-              child: Text(
-                widget.texto,
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-            if (widget.imagenUrl.isNotEmpty)
-              ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxHeight: 350,
-                ),
-                child: Image.network(
-                  widget.imagenUrl,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+            child: Row(
               children: [
-                IconButton(
-                  icon: Icon(
-                          _isLiked ? Icons.favorite : Icons.favorite_border,
-                          color: _isLiked ? Colors.red : null,
-                        ),
-                  onPressed: _toggleLike,
+                CircleAvatar(
+                  backgroundImage: NetworkImage(widget.fotoPerfil),
                 ),
-                Text(_likeCount.toString()),
-                const SizedBox(width: 20),
-                IconButton(
-                  icon: const Icon(Icons.comment),
-                  onPressed: () {},
+                const SizedBox(width: 10),
+                Text(
+                  widget.nombreUsuario,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 0, 14, 15),
+            child: Text(
+              widget.texto,
+              style: const TextStyle(fontSize: 16),
+            ),
+          ),
+          if (widget.imagenUrl.isNotEmpty)
+            ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 350,
+              ),
+              child: Image.network(
+                widget.imagenUrl,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                icon: Icon(
+                        _isLiked ? Icons.favorite : Icons.favorite_border,
+                        color: _isLiked ? Colors.red : null,
+                      ),
+                onPressed: _toggleLike,
+              ),
+              Text(_likeCount.toString()),
+              const SizedBox(width: 20),
+              IconButton(
+                icon: const Icon(Icons.comment),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

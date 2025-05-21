@@ -42,19 +42,6 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
       return;
     }
 
-  Future<void> _seleccionarImagen() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-        _imageFileName = pickedFile.name;
-      });
-    }
-  }
-
-
     final data = doc.data()! as Map<String, dynamic>;
 
     _fotoController.text = data['fotoPerfilUrl'] ?? '';
@@ -102,6 +89,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
     final existe = await usuarioExiste(nombreUsuario);
 
     if (existe) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('El nombre de usuario ya está en uso')),
       );
@@ -124,6 +112,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
             _selectedImage = null;
           });
         } catch (e) {
+          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Error al subir la imagen')),
           );
@@ -142,6 +131,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
         'fotoPerfilUrl': _fotoController.text.trim(),
       }, SetOptions(merge: true));
 
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Perfil actualizado')),
       );
@@ -253,6 +243,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
                 ),
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
+                  // ignore: use_build_context_synchronously
                   Navigator.pushReplacementNamed(context, '/login');
                 },
                 child: const Text('Cerrar sesión', style: TextStyle(fontSize: 16)),
@@ -328,7 +319,6 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
             onPressed: () => Navigator.of(context).pop(),
           ),
           ElevatedButton(
-            child: const Text('Eliminar'),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             onPressed: () async {
               final email = emailController.text.trim();
@@ -359,10 +349,11 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
                 await FirebaseFirestore.instance.collection('usuarios').doc(uid).delete();
                 await user?.delete();
 
+                // ignore: use_build_context_synchronously
                 Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
 
               } catch (e) {
-                print(e);
+                // ignore: use_build_context_synchronously
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Error al eliminar la cuenta.'),
@@ -371,6 +362,7 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
                 );
               }
             },
+            child: const Text('Eliminar'),
           ),
         ],
       ),

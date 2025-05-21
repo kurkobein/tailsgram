@@ -12,7 +12,6 @@ class PerfilScreen extends StatefulWidget {
 }
 
 class _PerfilScreenState extends State<PerfilScreen> {
-  final _formKey = GlobalKey<FormState>();
   final _fotoController = TextEditingController();
   final _usuarioController = TextEditingController(); 
   final _nombreController = TextEditingController();
@@ -127,7 +126,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Container(
+                  child: SizedBox(
                     width: double.infinity,
                     child: Text(
                       _descripcionController.text,

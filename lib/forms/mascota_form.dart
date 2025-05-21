@@ -51,6 +51,7 @@ class _MascotaFormState extends State<MascotaForm> {
     );
 
     if (imageUrl == null) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error al subir la imagen.')),
       );
@@ -70,6 +71,7 @@ class _MascotaFormState extends State<MascotaForm> {
 
     setState(() => _isLoading = false);
 
+    // ignore: use_build_context_synchronously
     Navigator.pushReplacementNamed(context, '/mascota-list');
   }
 

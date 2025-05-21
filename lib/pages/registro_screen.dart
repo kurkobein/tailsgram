@@ -46,6 +46,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
       if (existe) {
         setState(() => _cargando = false);
 
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('El nombre de usuario ya está en uso')),
         );
@@ -78,9 +79,10 @@ class _RegistroScreenState extends State<RegistroScreen> {
           'fotoPerfilUrl': imagenUrl ?? 'https://qehohrpghlqjkatoyqux.supabase.co/storage/v1/object/public/imagenes/fotos_defecto/default.png',
         });
 
-
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/home');
       } catch (e) {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: ${e.toString()}')),
         );

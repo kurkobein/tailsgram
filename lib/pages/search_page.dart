@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BuscadorUsuarios extends StatefulWidget {
+  const BuscadorUsuarios({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _BuscadorUsuariosState createState() => _BuscadorUsuariosState();
 }
 
@@ -35,11 +38,13 @@ class _BuscadorUsuariosState extends State<BuscadorUsuarios> {
             child: StreamBuilder<QuerySnapshot>(
               stream: buscarUsuarios(_textoBusqueda),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting)
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
+                }
 
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty)
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return Center(child: Text('No se encontraron usuarios.'));
+                }
                 final String uidActual = FirebaseAuth.instance.currentUser!.uid;
                 final usuarios = snapshot.data!.docs;
                 final usuariosFiltrados = usuarios.where((u) => u.id != uidActual).toList();
@@ -82,7 +87,7 @@ class _BuscadorUsuariosState extends State<BuscadorUsuarios> {
       return FirebaseFirestore.instance
           .collection('usuarios')
           .where('usuario', isGreaterThanOrEqualTo: texto)
-          .where('usuario', isLessThan: texto + 'z')
+          .where('usuario', isLessThan: '${texto}z')
           .snapshots();
     }
   }

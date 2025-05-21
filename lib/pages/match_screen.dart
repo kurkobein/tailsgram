@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tcard/tcard.dart';
 
 class Match extends StatelessWidget {
+  const Match({super.key});
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> cards = List.generate(
@@ -31,10 +33,8 @@ class Match extends StatelessWidget {
           cards: cards,
           controller: controller,
           onForward: (index, info) {
-            print("Swiped card $index");
           },
           onEnd: () {
-            print("No más tarjetas");
           },
         ),
       ),

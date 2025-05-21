@@ -112,6 +112,7 @@ class MascotaDetalleScreen extends StatelessWidget {
 
                       if (confirmacion == true) {
                         await MascotaService().eliminarMascota(mascota.id);
+                        // ignore: use_build_context_synchronously
                         Navigator.pushReplacementNamed(context, '/mascota-list');
                       }
                     },
