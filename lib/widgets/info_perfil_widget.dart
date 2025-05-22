@@ -23,25 +23,54 @@ class _InformacionState extends State<Informacion> {
         .get();
   }
 
+  Future<int> contarMascotasUsuario(String userId) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('mascotas')
+        .where('duenoId', isEqualTo: userId)
+        .get();
+    return querySnapshot.docs.length;
+  }
+
+  Future<List<dynamic>> obtenerDatosPerfilYConteo() async {
+    final perfil = await obtenerDatosPerfil();
+    final bool miPerfil = widget.idPerfil == idUsuarioActual;
+    if (miPerfil){
+      final cantidadMascotas = await contarMascotasUsuario(idUsuarioActual);
+      print('Cantidad de mascotas: $cantidadMascotas');
+      return [perfil, cantidadMascotas];
+    } 
+    else {
+      print('No es mi perfil ' + widget.idPerfil);
+      final cantidadMascotas = await contarMascotasUsuario(widget.idPerfil);
+      print('Cantidad de mascotas: $cantidadMascotas');
+      return [perfil, cantidadMascotas];
+    }
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
-    final bool miPerfil = widget.idPerfil == idUsuarioActual;
 
-    return FutureBuilder<DocumentSnapshot>(
-      future: obtenerDatosPerfil(),
+    return FutureBuilder<List<dynamic>>(
+      future: obtenerDatosPerfilYConteo(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         }
 
-        if (!snapshot.hasData || !snapshot.data!.exists) {
-          return const Text("No se encontró el perfil.");
+        if (!snapshot.hasData || snapshot.data == null) {
+          return const Text('No se pudieron cargar los datos');
         }
 
-        // final data = snapshot.data!.data() as Map<String, dynamic>;
-        // final String idPerfil = snapshot.data!.id;
-        // final String idUsuarioActual = FirebaseAuth.instance.currentUser!.uid;
-        // print('estos son idUsuarioActual $idUsuarioActual e idPerfil $idPerfil');
+        final perfil = snapshot.data![0] as DocumentSnapshot;
+        final cantidadMascotas = snapshot.data![1] as int;
+
+        print('Perfil: ${perfil.data()}');
+        print('Cantidad de mascotas: $cantidadMascotas');
+
+        final bool miPerfil = widget.idPerfil == idUsuarioActual;
 
         return Container(
           decoration: BoxDecoration(
@@ -50,29 +79,48 @@ class _InformacionState extends State<Informacion> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
-                    child: Text('3 Mascotas', style: TextStyle(fontSize: 12)),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
-                    child: Text('50 seguidores', style: TextStyle(fontSize: 12)),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
-                    child: Text('30 seguidos', style: TextStyle(fontSize: 12)),
-                  ),
-                ],
-              ),
+              if (miPerfil) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
+                      child: Text('$cantidadMascotas Mascotas', style: const TextStyle(fontSize: 12)),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
+                      child: Text('50 seguidores', style: TextStyle(fontSize: 12)),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
+                      child: Text('30 seguidos', style: TextStyle(fontSize: 12)),
+                    ),
+                  ],
+                ),
+              ] else ...[
+                
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
+                      child: Text('$cantidadMascotas Mascotas', style: const TextStyle(fontSize: 12)),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
+                      child: Text('50 seguidores', style: TextStyle(fontSize: 12)),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
+                      child: Text('30 seguidos', style: TextStyle(fontSize: 12)),
+                    ),
+                  ],
+                ),
+              ],
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                 
                   if (miPerfil) ...[
-                    // Botón: Editar mascotas (si es tu perfil)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
                       child: BotonEstandarPerfil(
@@ -83,20 +131,17 @@ class _InformacionState extends State<Informacion> {
                         ancho: 20,
                       ),
                     ),
-                    // Botón: Editar perfil
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 1.0),
                       child: BotonEstandarPerfil(
                         texto: 'Editar Perfil',
-                        onPressed: () async {
+                        onPressed: () {
                           Navigator.pushNamed(context, '/configuracion');
                         },
                         ancho: 28,
                       ),
-
                     ),
                   ] else ...[
-                    // Botón: Ver mascotas del otro usuario
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
                       child: BotonEstandarPerfil(
@@ -112,12 +157,11 @@ class _InformacionState extends State<Informacion> {
                         ancho: 28,
                       ),
                     ),
-                    // Botón: Seguir / Dejar de seguir
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
                       child: BotonEstandarPerfil(
                         texto: 'Siguiendo',
-                        onPressed: () async {
+                        onPressed: () {
                           // await _toggleSeguir(idPerfil);
                         },
                         ancho: 20,
@@ -126,11 +170,11 @@ class _InformacionState extends State<Informacion> {
                   ],
                 ],
               ),
-
             ],
           ),
         );
       },
+
     );
   }
 }

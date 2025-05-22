@@ -141,13 +141,9 @@ class _PerfilScreenState extends State<PerfilScreen> {
               const SizedBox(height: 5),
               const Divider(thickness: 1, color: Color(0xFFD8D8D8)),
               const SizedBox(height: 5),
-              const Text(
-                'Publicaciones',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              // Cambiamos el Expanded por un Container con un height fijo o lo eliminamos
-              // ya que SingleChildScrollView no puede tener hijos con restricciones flexibles
+              
               ListaPublicacionesPerfil(uidPerfil: uidActual),
+              
             ],
           ),
         ),

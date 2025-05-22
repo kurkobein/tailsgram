@@ -11,7 +11,7 @@ class MascotaListScreen extends StatelessWidget {
     final String usuarioId = uid ?? FirebaseAuth.instance.currentUser!.uid;
     final mascotasRef = FirebaseFirestore.instance
         .collection('mascotas')
-        .where('duenioId', isEqualTo: usuarioId);
+        .where('duenoId', isEqualTo: usuarioId);
     final bool esMiPerfil = usuarioId == FirebaseAuth.instance.currentUser!.uid;
 
 
@@ -95,27 +95,27 @@ class MascotaListScreen extends StatelessWidget {
               },
             ),
           ),
-          if (esMiPerfil)
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/mascota-form');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFF6B81),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  minimumSize: const Size.fromHeight(48),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
+          if (esMiPerfil) ...{
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/mascota-form');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFF6B81),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    minimumSize: const Size.fromHeight(48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
                   ),
+                  child: const Text('Registrar nueva mascota',
+                      style: TextStyle(fontSize: 16)),
                 ),
-                child: const Text('Registrar nueva mascota',
-                    style: TextStyle(fontSize: 16)),
-              ),
-          ) else
-            // Botón para seguir al usuario
+            )
+          }else ...{
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
@@ -135,6 +135,7 @@ class MascotaListScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 16)),
               ),
             )
+          }
         ],
       ),
     );

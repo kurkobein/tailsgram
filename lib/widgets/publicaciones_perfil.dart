@@ -7,6 +7,7 @@ class ListaPublicacionesPerfil extends StatelessWidget {
 
   const ListaPublicacionesPerfil({super.key, required this.uidPerfil});
 
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(

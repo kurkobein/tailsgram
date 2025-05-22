@@ -21,7 +21,7 @@ class MascotaService {
       'genero': genero,
       'descripcion': descripcion,
       'imagenUrl': imagenUrl,
-      'duenioId': _uid,
+      'duenoId': _uid,
       'fechaCreacion': FieldValue.serverTimestamp(),
     });
   }
@@ -29,7 +29,7 @@ class MascotaService {
   Stream<QuerySnapshot> obtenerMascotasDelUsuario() {
     return _db
         .collection('mascotas')
-        .where('duenioId', isEqualTo: _uid)
+        .where('duenoId', isEqualTo: _uid)
         .snapshots();
   }
 
