@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailsgram/widgets/info_perfil_widget.dart';
+import 'package:tailsgram/widgets/publicaciones_perfil.dart';
 
 class PerfilUsuarioScreen extends StatelessWidget {
   const PerfilUsuarioScreen({super.key});
@@ -47,57 +48,64 @@ class PerfilUsuarioScreen extends StatelessWidget {
             ),
           ),
 
-          body: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.grey,
-                          backgroundImage: NetworkImage(data['fotoPerfilUrl'] ?? ''),    
-                        ),
-                        SizedBox(width: 15),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(data['nombre'] ?? '', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                            SizedBox(height: 5),
-                            Informacion(idPerfil: uid,),
-                          ],
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                Container(
-                  height: 150,
-                  width: double.infinity, // Este hace que el contenedor ocupe todo el ancho disponible
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Color(0xFFD8D8D8)),
-                    color: const Color(0xFFEFFDF5),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Colors.grey,
+                            backgroundImage: NetworkImage(data['fotoPerfilUrl'] ?? ''),    
+                          ),
+                          SizedBox(width: 15),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(data['nombre'] ?? '', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                              SizedBox(height: 5),
+                              Informacion(idPerfil: uid,),
+                            ],
+                          )
+                        ],
+                      )
+                    ],
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SizedBox(
-                      width: double.infinity, // Esto hace que el Text ocupe todo el ancho disponible dentro del padding
-                      child: Text(
-                        data['descripcion'] ?? '',
-                        style: TextStyle(fontSize: 14),
-                        textAlign: TextAlign.left, 
-                        maxLines: null, // Permite múltiples líneas si el texto es largo
-                        overflow: TextOverflow.visible,
+                  Container(
+                    height: 150,
+                    width: double.infinity, // Este hace que el contenedor ocupe todo el ancho disponible
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Color(0xFFD8D8D8)),
+                      color: const Color(0xFFEFFDF5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: SizedBox(
+                        width: double.infinity, // Esto hace que el Text ocupe todo el ancho disponible dentro del padding
+                        child: Text(
+                          data['descripcion'] ?? '',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.left, 
+                          maxLines: null, // Permite múltiples líneas si el texto es largo
+                          overflow: TextOverflow.visible,
+                        ),
                       ),
                     ),
                   ),
-                ),
-
-              ],
+                  const SizedBox(height: 5),
+                  const Divider(thickness: 1, color: Color(0xFFD8D8D8)),
+                  const SizedBox(height: 5),
+            
+                  ListaPublicacionesPerfil(uidPerfil: uid),
+                  
+                ],
+              ),
             ),
           ),
         );
