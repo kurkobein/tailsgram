@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tailsgram/pages/profile_config_page.dart';
 import 'package:tailsgram/pages/perfil_usuario.dart';
+import 'package:tailsgram/pages/test_mensajeria.dart';
+import 'package:tailsgram/pages/lista_chats.dart' as chats;
+import 'package:tailsgram/pages/test_mensajeria.dart';
 import 'import.dart';
 
 class AppRoutes {
@@ -19,5 +22,11 @@ class AppRoutes {
     '/configuracion': (context)=>const ConfiguracionPerfil(),
     '/mascota-editar': (context) => const MascotaEditarScreen(),
     '/perfil-usuario': (context) => const PerfilUsuarioScreen(),
+    '/chat': (context) {
+      final args = ModalRoute.of(context)!.settings.arguments as String;
+      return ChatScreen(otherUserId: args);
+    },
+    '/lista-chats': (context) => chats.ListaChatsScreen(),
+
   };
 }

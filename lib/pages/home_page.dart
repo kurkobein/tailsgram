@@ -46,8 +46,21 @@ class ListaPublicaciones extends StatelessWidget {
               'assets/images/logo.png',
               height: 40,
             ),
-            SizedBox(
-              width: 50,
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/lista-chats');
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 198, 241, 214),
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(8),
+                shadowColor: Colors.transparent,
+              ),
+              child: const Icon(
+                Icons.chat_bubble_outline,
+                color: Colors.black,
+                size: 35,
+              ),
             ),
           ],
         ),

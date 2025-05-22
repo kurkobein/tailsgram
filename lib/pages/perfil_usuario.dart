@@ -154,13 +154,22 @@ class PerfilUsuarioScreen extends StatelessWidget {
                           data['descripcion'] ?? '',
                           style: TextStyle(fontSize: 14),
                           textAlign: TextAlign.left, 
-                          maxLines: null, // Permite múltiples líneas si el texto es largo
+                          maxLines: null,
                           overflow: TextOverflow.visible,
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 5),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      print('id de argumento: $uid');
+                      Navigator.pushNamed(context, '/chat', arguments: uid);
+                    }, 
+                    child: Text('Mensajeeeeeesssss')
+                  ),
+
                   const Divider(thickness: 1, color: Color(0xFFD8D8D8)),
                   const SizedBox(height: 5),
             
