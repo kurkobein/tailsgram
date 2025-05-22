@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tailsgram/widgets/boton_estandar_perfil.dart';
 import 'package:tailsgram/pages/list_mascota_screen.dart';
+import 'package:tailsgram/widgets/boton_seguir.dart';
 
 class Informacion extends StatefulWidget {
   final String idPerfil;
@@ -15,6 +16,37 @@ class Informacion extends StatefulWidget {
 
 class _InformacionState extends State<Informacion> {
   final String idUsuarioActual = FirebaseAuth.instance.currentUser!.uid;
+
+  Future<bool> yaSigoA(String idSeguido) async {
+    final idActual = FirebaseAuth.instance.currentUser!.uid;
+
+    final doc = await FirebaseFirestore.instance
+        .collection('seguidos')
+        .doc(idActual)
+        .collection('usuarios')
+        .doc(idSeguido)
+        .get();
+
+    return doc.exists;
+  }
+
+  Future<int> contarSeguidores(String idUsuario) async {
+    final snap = await FirebaseFirestore.instance
+        .collection('seguidores')
+        .doc(idUsuario)
+        .collection('usuarios')
+        .get();
+    return snap.docs.length;
+  }
+
+  Future<int> contarSeguidos(String idUsuario) async {
+    final snap = await FirebaseFirestore.instance
+        .collection('seguidos')
+        .doc(idUsuario)
+        .collection('usuarios')
+        .get();
+    return snap.docs.length;
+  }
 
   Future<DocumentSnapshot> obtenerDatosPerfil() async {
     return await FirebaseFirestore.instance
@@ -36,19 +68,19 @@ class _InformacionState extends State<Informacion> {
     final bool miPerfil = widget.idPerfil == idUsuarioActual;
     if (miPerfil){
       final cantidadMascotas = await contarMascotasUsuario(idUsuarioActual);
-      print('Cantidad de mascotas: $cantidadMascotas');
-      return [perfil, cantidadMascotas];
+      final seguidores = await contarSeguidores(idUsuarioActual);
+      final seguidos = await contarSeguidos(idUsuarioActual);
+      final yaSigo = await yaSigoA(idUsuarioActual);
+      return [perfil, cantidadMascotas, seguidores, seguidos, yaSigo];
     } 
     else {
-      print('No es mi perfil ' + widget.idPerfil);
       final cantidadMascotas = await contarMascotasUsuario(widget.idPerfil);
-      print('Cantidad de mascotas: $cantidadMascotas');
-      return [perfil, cantidadMascotas];
+      final seguidores = await contarSeguidores(widget.idPerfil);
+      final seguidos = await contarSeguidos(widget.idPerfil);
+      final yaSigo = await yaSigoA(widget.idPerfil);
+      return [perfil, cantidadMascotas, seguidores, seguidos, yaSigo];
     }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +98,11 @@ class _InformacionState extends State<Informacion> {
 
         final perfil = snapshot.data![0] as DocumentSnapshot;
         final cantidadMascotas = snapshot.data![1] as int;
+        final seguidores = snapshot.data![2] as int;
+        final seguidos = snapshot.data![3] as int;
+        final yaSigo = snapshot.data![4] as bool;
 
-        print('Perfil: ${perfil.data()}');
-        print('Cantidad de mascotas: $cantidadMascotas');
+        print("ya sigo a esta persona $yaSigo");
 
         final bool miPerfil = widget.idPerfil == idUsuarioActual;
 
@@ -87,13 +121,13 @@ class _InformacionState extends State<Informacion> {
                       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
                       child: Text('$cantidadMascotas Mascotas', style: const TextStyle(fontSize: 12)),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
-                      child: Text('50 seguidores', style: TextStyle(fontSize: 12)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
+                      child: Text('$seguidores seguidores', style: const TextStyle(fontSize: 12)),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
-                      child: Text('30 seguidos', style: TextStyle(fontSize: 12)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
+                      child: Text('$seguidos seguidos', style: const TextStyle(fontSize: 12)),
                     ),
                   ],
                 ),
@@ -106,13 +140,13 @@ class _InformacionState extends State<Informacion> {
                       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
                       child: Text('$cantidadMascotas Mascotas', style: const TextStyle(fontSize: 12)),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
-                      child: Text('50 seguidores', style: TextStyle(fontSize: 12)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
+                      child: Text('$seguidores seguidores', style: const TextStyle(fontSize: 12)),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
-                      child: Text('30 seguidos', style: TextStyle(fontSize: 12)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
+                      child: Text('$seguidos seguidos', style: const TextStyle(fontSize: 12)),
                     ),
                   ],
                 ),
@@ -159,13 +193,7 @@ class _InformacionState extends State<Informacion> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
-                      child: BotonEstandarPerfil(
-                        texto: 'Siguiendo',
-                        onPressed: () {
-                          // await _toggleSeguir(idPerfil);
-                        },
-                        ancho: 20,
-                      ),
+                      child: BotonSeguir(idSeguido: widget.idPerfil),
                     ),
                   ],
                 ],

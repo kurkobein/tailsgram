@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailsgram/widgets/info_perfil_widget.dart';
@@ -5,6 +6,67 @@ import 'package:tailsgram/widgets/publicaciones_perfil.dart';
 
 class PerfilUsuarioScreen extends StatelessWidget {
   const PerfilUsuarioScreen({super.key});
+
+  Future<void> toggleSeguirUsuario(String idSeguido) async {
+    final idActual = FirebaseAuth.instance.currentUser!.uid;
+
+    final docSeguidor = FirebaseFirestore.instance
+        .collection('seguidores')
+        .doc(idSeguido)
+        .collection('usuarios')
+        .doc(idActual);
+
+    final docSeguido = FirebaseFirestore.instance
+        .collection('seguidos')
+        .doc(idActual)
+        .collection('usuarios')
+        .doc(idSeguido);
+
+    final docSnapshot = await docSeguidor.get();
+
+    if (docSnapshot.exists) {
+      // Dejar de seguir
+      await docSeguidor.delete();
+      await docSeguido.delete();
+    } else {
+      // Seguir
+      final now = Timestamp.now();
+      await docSeguidor.set({'timestamp': now});
+      await docSeguido.set({'timestamp': now});
+    }
+  }
+
+  Future<bool> yaSigoA(String idSeguido) async {
+    final idActual = FirebaseAuth.instance.currentUser!.uid;
+
+    final doc = await FirebaseFirestore.instance
+        .collection('seguidos')
+        .doc(idActual)
+        .collection('usuarios')
+        .doc(idSeguido)
+        .get();
+
+    return doc.exists;
+  }
+
+  Future<int> contarSeguidores(String idUsuario) async {
+    final snap = await FirebaseFirestore.instance
+        .collection('seguidores')
+        .doc(idUsuario)
+        .collection('usuarios')
+        .get();
+    return snap.docs.length;
+  }
+
+  Future<int> contarSeguidos(String idUsuario) async {
+    final snap = await FirebaseFirestore.instance
+        .collection('seguidos')
+        .doc(idUsuario)
+        .collection('usuarios')
+        .get();
+    return snap.docs.length;
+  }
+
 
   @override
   Widget build(BuildContext context) {
