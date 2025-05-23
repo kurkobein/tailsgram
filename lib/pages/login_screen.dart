@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 100,
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 11),
                       const Text(
                         '¡Inicia sesión aquí!',
                         style: TextStyle(

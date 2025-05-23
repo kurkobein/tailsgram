@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tailsgram/services/storage/storage_image_post.dart';
@@ -86,83 +85,85 @@ class _PaginaSubirState extends State<PaginaSubir> {
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 198, 241, 214),
       ),
-      body: FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance.collection('usuarios').doc(user?.uid).get(),
-        builder: (context, snapshot) {
-          String userName = 'Usuario';
-          if (snapshot.hasData && snapshot.data!.exists) {
-            final data = snapshot.data!.data() as Map<String, dynamic>;
-            userName = data['usuario'] ?? data['nombreUsuario'] ?? 'Usuario';
-          }
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+      body: SingleChildScrollView(
+        child: FutureBuilder<DocumentSnapshot>(
+              future: FirebaseFirestore.instance.collection('usuarios').doc(user?.uid).get(),
+              builder: (context, snapshot) {
+                String userName = 'Usuario';
+                if (snapshot.hasData && snapshot.data!.exists) {
+                  final data = snapshot.data!.data() as Map<String, dynamic>;
+                  userName = data['usuario'] ?? data['nombreUsuario'] ?? 'Usuario';
+                }
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.grey,
-                            child: Text(
-                              (userName.isNotEmpty ? userName[0].toUpperCase() : '?'),
-                              style: const TextStyle(color: Colors.white),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.grey,
+                                  child: Text(
+                                    (userName.isNotEmpty ? userName[0].toUpperCase() : '?'),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Text('$userName dice...', style: TextStyle(fontSize: 18)),
+                              ],
                             ),
-                          ),
-                          SizedBox(width: 10),
-                          Text('$userName dice...', style: TextStyle(fontSize: 18)),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      TextField(
-                        controller: _textoController,
-                        maxLines: 5,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(color: Colors.grey),
-                          hintText: '¡Cuentale al mundo tu dia!',
+                            const SizedBox(height: 8),
+                            TextField(
+                              controller: _textoController,
+                              maxLines: 5,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(color: Colors.grey),
+                                hintText: '¡Cuentale al mundo tu dia!',
+                              ),
+                            ),
+                            if (_selectedImage != null) ...[
+                              const SizedBox(height: 10),
+                              Image.file(_selectedImage!, width: double.infinity, fit: BoxFit.cover),
+                            ],
+                          ],
                         ),
                       ),
-                      if (_selectedImage != null) ...[
-                        const SizedBox(height: 10),
-                        Image.file(_selectedImage!, width: double.infinity, fit: BoxFit.cover),
-                      ],
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            onPressed: _seleccionarImagen,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              padding: EdgeInsets.zero,
+                              shape: const CircleBorder(),
+                              elevation: 0,
+                            ),
+                            child: const Icon(Icons.photo_outlined, size: 40, color: Color.fromRGBO(255, 107, 129, 1)),
+                          ),
+                          
+                          _isLoading
+                              ? const CircularProgressIndicator()
+                              : BotonEstandar(texto: 'Publicar', onPressed: _subirPublicacion),
+                        ],
+                      )
                     ],
                   ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                      onPressed: _seleccionarImagen,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        padding: EdgeInsets.zero,
-                        shape: const CircleBorder(),
-                        elevation: 0,
-                      ),
-                      child: const Icon(Icons.photo_outlined, size: 40, color: Color.fromRGBO(255, 107, 129, 1)),
-                    ),
-                    
-                    _isLoading
-                        ? const CircularProgressIndicator()
-                        : BotonEstandar(texto: 'Publicar', onPressed: _subirPublicacion),
-                  ],
-                )
-              ],
+                );
+              },
             ),
-          );
-        },
-      ),
-    );
+          )
+      );
   }
 }

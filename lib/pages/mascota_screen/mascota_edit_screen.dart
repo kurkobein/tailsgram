@@ -27,12 +27,14 @@ class _MascotaEditarScreenState extends State<MascotaEditarScreen> {
 
 
   late DocumentSnapshot mascota;
+  late String mascotaId;
+
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    mascota = ModalRoute.of(context)!.settings.arguments as DocumentSnapshot;
-    final data = mascota.data() as Map<String, dynamic>;
+
+    final data = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     _nombreController.text = data['nombre'] ?? '';
     _razaController.text = data['raza'] ?? '';
@@ -40,7 +42,11 @@ class _MascotaEditarScreenState extends State<MascotaEditarScreen> {
     _descripcionController.text = data['descripcion'] ?? '';
     _imagenUrlController.text = data['imagenUrl'] ?? '';
     _genero = data['genero'] ?? 'Macho';
+
+    mascotaId = data['id'];
   }
+
+
 
   Future<void> _seleccionarImagen() async {
     final picker = ImagePicker();
@@ -68,7 +74,7 @@ class _MascotaEditarScreenState extends State<MascotaEditarScreen> {
 
     if (_formKey.currentState!.validate()) {
       await MascotaService().actualizarMascota(
-        id: mascota.id,
+        id: mascotaId,
         nombre: _nombreController.text,
         raza: _razaController.text,
         edad: int.parse(_edadController.text),
@@ -104,8 +110,8 @@ class _MascotaEditarScreenState extends State<MascotaEditarScreen> {
     );
 
     if (confirmacion == true) {
-      await MascotaService().eliminarMascota(mascota.id);
-      // ignore: use_build_context_synchronously
+      await MascotaService().eliminarMascota(mascotaId);
+
       Navigator.pushReplacementNamed(context, '/mascota-list');
     }
   }

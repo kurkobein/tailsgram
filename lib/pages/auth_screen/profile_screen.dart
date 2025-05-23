@@ -103,7 +103,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                             ? NetworkImage(_fotoController.text)
                             : null,    
                       ),
-                      SizedBox(width: 15),
+                      SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
