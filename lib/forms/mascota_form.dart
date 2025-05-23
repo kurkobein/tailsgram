@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tailsgram/services/mascota_service.dart';
 import 'package:tailsgram/services/storage/storage_foto_mascota.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 class MascotaForm extends StatefulWidget {
   const MascotaForm({super.key});
@@ -16,6 +18,7 @@ class _MascotaFormState extends State<MascotaForm> {
   final _razaController = TextEditingController();
   final _edadController = TextEditingController();
   final _descripcionController = TextEditingController();
+
 
   String _generoSeleccionado = 'Macho';
   File? _selectedImage;
@@ -58,7 +61,8 @@ class _MascotaFormState extends State<MascotaForm> {
       setState(() => _isLoading = false);
       return;
     }
-
+    //obtener la ubicacion al momento de agregar la mascota
+    Position pos= await Geolocator.getCurrentPosition();
     // Guardar datos en Firestore
     await MascotaService().crearMascota(
       nombre: _nombreController.text,
@@ -67,6 +71,9 @@ class _MascotaFormState extends State<MascotaForm> {
       genero: _generoSeleccionado,
       descripcion: _descripcionController.text,
       imagenUrl: imageUrl,
+      lat: pos.latitude,
+      lng: pos.longitude,
+
     );
 
     setState(() => _isLoading = false);

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:latlong2/latlong.dart';
 
 class MascotaService {
   final _db = FirebaseFirestore.instance;
@@ -13,6 +14,8 @@ class MascotaService {
     required String genero,
     required String descripcion,
     required String imagenUrl,
+    required double lat, 
+    required double lng, 
   }) async {
     await _db.collection('mascotas').add({
       'nombre': nombre,
@@ -23,6 +26,7 @@ class MascotaService {
       'imagenUrl': imagenUrl,
       'duenoId': _uid,
       'fechaCreacion': FieldValue.serverTimestamp(),
+      'ubicacion' : GeoPoint(lat,lng)
     });
   }
 
@@ -59,4 +63,45 @@ class MascotaService {
   Future<void> eliminarMascota(String mascotaId) async {
     await _db.collection('mascotas').doc(mascotaId).delete();
   }
+
+
+  Future<List<Map<String, dynamic>>> obtenerMascotasCercanasNoVistas(
+      LatLng ubicacionUsuario) async {
+    final todas = await _db.collection('mascotas').get();
+
+    final likesPrevios = await _db
+        .collection('likes')
+        .where('usuarioId', isEqualTo: _uid)
+        .get();
+
+    final yaVistas = likesPrevios.docs
+        .map((doc) => doc['mascotaId'] as String)
+        .toSet();
+
+    final distancia = Distance();
+
+    final mascotasFiltradas = todas.docs.where((doc) {
+      final data = doc.data();
+      final id = doc.id;
+
+      if (data['duenioId'] == _uid) return false;
+
+      if (yaVistas.contains(id)) return false;
+
+      final geo = data['ubicacion'];
+      if (geo == null) return false;
+
+      final distanciaKm = distancia.as(
+        LengthUnit.Kilometer,
+        ubicacionUsuario,
+        LatLng(geo.latitude, geo.longitude),
+      );
+
+      return distanciaKm <= 5;
+    }).map((doc) => {...doc.data(), 'id': doc.id}).toList();
+
+    return mascotasFiltradas;
+  }
 }
+
+

@@ -9,14 +9,20 @@ class MascotaDetalleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments;
 
-    if (args is! DocumentSnapshot) {
+    late final String mascotaId;
+    late final Map<String, dynamic> data;
+
+    if (args is DocumentSnapshot) {
+      mascotaId = args.id;
+      data = args.data() as Map<String, dynamic>;
+    } else if (args is Map<String, dynamic> && args.containsKey('id')) {
+      mascotaId = args['id'];
+      data = args;
+    } else {
       return const Scaffold(
         body: Center(child: Text('Error: datos de la mascota no válidos')),
       );
     }
-
-    final mascota = args;
-    final data = mascota.data() as Map<String, dynamic>;
 
     return Scaffold(
       backgroundColor: const Color(0xFFC5F3D6),
@@ -34,37 +40,34 @@ class MascotaDetalleScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.white,
+            if (data['imagenUrl'] != null && data['imagenUrl'].toString().isNotEmpty)
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                ),
+                child: Image.network(
+                  data['imagenUrl'],
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
               ),
-              child: Image.network(
-                data['imagenUrl'] ?? '',
-                width: 150,
-                fit: BoxFit.cover,
-                
-              ),
-            ),
+            const SizedBox(height: 16),
             Text('Nombre:', style: _etiqueta()),
             Text(data['nombre'] ?? '', style: _valor()),
-
             const SizedBox(height: 12),
             Text('Raza:', style: _etiqueta()),
             Text(data['raza'] ?? '', style: _valor()),
-
             const SizedBox(height: 12),
             Text('Edad:', style: _etiqueta()),
             Text('${data['edad'] ?? '-'} años', style: _valor()),
-
             const SizedBox(height: 12),
             Text('Género:', style: _etiqueta()),
             Text(data['genero'] ?? '', style: _valor()),
-
             const SizedBox(height: 20),
             Text('Descripción:', style: _etiqueta()),
             Text(data['descripcion'] ?? '-', style: _valor()),
-
             const SizedBox(height: 30),
             Row(
               children: [
@@ -74,7 +77,7 @@ class MascotaDetalleScreen extends StatelessWidget {
                       Navigator.pushNamed(
                         context,
                         '/mascota-editar',
-                        arguments: mascota,
+                        arguments: {'id': mascotaId, ...data},
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -111,7 +114,7 @@ class MascotaDetalleScreen extends StatelessWidget {
                       );
 
                       if (confirmacion == true) {
-                        await MascotaService().eliminarMascota(mascota.id);
+                        await MascotaService().eliminarMascota(mascotaId);
                         // ignore: use_build_context_synchronously
                         Navigator.pushReplacementNamed(context, '/mascota-list');
                       }
