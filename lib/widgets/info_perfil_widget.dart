@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tailsgram/widgets/boton_estandar_perfil.dart';
-import 'package:tailsgram/pages/list_mascota_screen.dart';
+import 'package:tailsgram/pages/mascota_screen/list_mascota_screen.dart';
 import 'package:tailsgram/widgets/boton_seguir.dart';
 
 class Informacion extends StatefulWidget {

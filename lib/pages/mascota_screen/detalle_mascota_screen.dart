@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../services/mascota_service.dart';
+import '../../services/mascota_service.dart';
 
 class MascotaDetalleScreen extends StatelessWidget {
   const MascotaDetalleScreen({super.key});

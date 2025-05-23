@@ -3,7 +3,7 @@ import 'package:tailsgram/services/storage/storage_foto_mascota.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../services/mascota_service.dart';
+import '../../services/mascota_service.dart';
 import 'package:geolocator/geolocator.dart';
 
 

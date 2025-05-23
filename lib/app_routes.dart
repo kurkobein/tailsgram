@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tailsgram/pages/profile_config_page.dart';
+import 'package:tailsgram/pages/auth_screen/profile_config_page.dart';
 import 'package:tailsgram/pages/perfil_usuario.dart';
 import 'package:tailsgram/pages/test_mensajeria.dart';
 import 'package:tailsgram/pages/lista_chats.dart' as chats;

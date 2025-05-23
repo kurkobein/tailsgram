@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../forms/mascota_form.dart';
+import '../../forms/mascota_form.dart';
 
 class MascotaFormScreen extends StatelessWidget {
   const MascotaFormScreen({super.key});
