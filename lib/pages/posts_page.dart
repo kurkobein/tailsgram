@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tailsgram/services/storage/storage_image_post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailsgram/widgets/boton_estandar.dart';
@@ -20,14 +22,37 @@ class _PaginaSubirState extends State<PaginaSubir> {
 
   // Selecciona imagen con StorageService, pero no la sube aún
   Future<void> _seleccionarImagen() async {
-    final result = await StorageService().seleccionarImagen();
-    if (result != null) {
-      setState(() {
-        _selectedImage = result.file;
-        _imageFileName = result.fileName;
-      });
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: pickedFile.path,
+        aspectRatio: const CropAspectRatio(ratioX: 16, ratioY: 16),
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Recorta tu imagen',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: true,
+          ),
+          IOSUiSettings(
+            title: 'Recorta tu imagen',
+            aspectRatioLockEnabled: true,
+          ),
+        ],
+      );
+
+      if (croppedFile != null) {
+        setState(() {
+          _selectedImage = File(croppedFile.path);
+          _imageFileName = pickedFile.name;
+        });
+      }
     }
   }
+
 
   Future<void> _subirPublicacion() async {
     final texto = _textoController.text.trim();
