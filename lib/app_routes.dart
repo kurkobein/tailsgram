@@ -5,6 +5,7 @@ import 'package:tailsgram/pages/test_mensajeria.dart';
 import 'package:tailsgram/pages/lista_chats.dart' as chats;
 import 'package:tailsgram/pages/test_mensajeria.dart';
 import 'import.dart';
+import 'package:tailsgram/pages/crear_evento.dart';
 
 class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
