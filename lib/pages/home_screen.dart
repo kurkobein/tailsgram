@@ -3,7 +3,7 @@ import '../pages/home_page.dart';
 import '../pages/search_page.dart';
 import 'posts_page.dart';
 import '../pages/map_page.dart';
-import '../pages/calendario_page.dart';
+import 'eventos_page.dart';
 import '../import.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     BuscadorUsuarios(),
     const PaginaSubir(),
     const PaginaMapa(),
-    const PaginaCalendario(),
+    const PaginaEventos(),
     const PerfilScreen()
   ];
 
