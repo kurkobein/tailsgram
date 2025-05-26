@@ -6,3 +6,4 @@ export 'pages/auth_screen/registro_screen.dart';
 export 'pages/login_screen.dart';
 export 'pages/auth_screen/profile_screen.dart';
 export 'pages/mascota_screen/mascota_edit_screen.dart';
+export 'pages/evento_screen/evento_detalle.dart';

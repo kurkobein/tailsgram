@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailsgram/widgets/boton_estandar.dart';
-import 'package:tailsgram/pages/crear_evento.dart';
+import 'package:tailsgram/pages/evento_screen/crear_evento.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PaginaEventos extends StatelessWidget {

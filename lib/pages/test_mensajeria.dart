@@ -69,8 +69,9 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Chat')),
-      body: chatId == null
+     appBar: AppBar(
+        backgroundColor: const Color(0xFFAAF0D1),
+      ),body: chatId == null
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [

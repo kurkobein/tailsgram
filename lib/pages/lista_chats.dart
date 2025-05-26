@@ -12,7 +12,10 @@ class ListaChatsScreen extends StatelessWidget {
     final uid = FirebaseAuth.instance.currentUser!.uid;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Mis chats')),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFAAF0D1),
+        title: Text("Mis chats"),
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('chats')
