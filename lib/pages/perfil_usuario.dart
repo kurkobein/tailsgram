@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailsgram/widgets/info_perfil_widget.dart';
 import 'package:tailsgram/widgets/publicaciones_perfil.dart';
-
+import 'package:tailsgram/widgets/boton_estandar_perfil.dart';
 class PerfilUsuarioScreen extends StatelessWidget {
   const PerfilUsuarioScreen({super.key});
 
@@ -115,6 +115,7 @@ class PerfilUsuarioScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -132,7 +133,11 @@ class PerfilUsuarioScreen extends StatelessWidget {
                               Text(data['nombre'] ?? '', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                               SizedBox(height: 5),
                               Informacion(idPerfil: uid,),
-                            ],
+                              BotonEstandarPerfil(texto: 'Enviar mensaje', onPressed: () {
+                              Navigator.pushNamed(context, '/chat', arguments: uid);
+                            }, ancho: 15),
+                          const Divider(thickness: 1, color: Color(0xFFD8D8D8)),
+                          const SizedBox(height: 5),],
                           )
                         ],
                       )
@@ -162,14 +167,9 @@ class PerfilUsuarioScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
 
-                  ElevatedButton(
-                    onPressed: () {
-                      print('id de argumento: $uid');
-                      Navigator.pushNamed(context, '/chat', arguments: uid);
-                    }, 
-                    child: Text('Mensajeeeeeesssss')
-                  ),
-
+                  const Divider(thickness: 1, color: Color(0xFFD8D8D8)),
+                  const SizedBox(height: 5),
+                  
                   const Divider(thickness: 1, color: Color(0xFFD8D8D8)),
                   const SizedBox(height: 5),
             
