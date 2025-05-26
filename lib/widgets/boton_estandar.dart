@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 class BotonEstandar extends StatelessWidget {
   final String texto;
   final Function() onPressed;
+  final Widget? child;
+
   const BotonEstandar({
     super.key,
     required this.texto,
     required this.onPressed,
+    this.child,
   });
 
   @override
@@ -19,7 +22,10 @@ class BotonEstandar extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-        child: Text(texto, style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
+        child: child ?? Text(
+          texto,
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
     );
   }

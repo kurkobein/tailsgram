@@ -15,10 +15,13 @@ class _SeleccionarUbicacionState extends State<SeleccionarUbicacion> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Seleccionar ubicación')),
+      appBar: AppBar(
+        title: const Text('Seleccionar ubicación'),
+        backgroundColor: const Color(0xFFAAF0D1),
+      ),
       body: FlutterMap(
         options: MapOptions(
-          center: LatLng(-33.4489, -70.6693), // Santiago, por ejemplo
+          center: LatLng(-33.4489, -70.6693),
           zoom: 13.0,
           onTap: (tapPosition, point) {
             setState(() {

@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:tailsgram/widgets/boton_estandar.dart';
 import 'package:tailsgram/widgets/elegir_ubicacion.dart';
+import 'package:tailsgram/widgets/boton_estandar.dart';
 
 class CrearEvento extends StatefulWidget {
   final Function(String titulo, String descripcion, DateTime fechaHora) onGuardar;
@@ -94,31 +96,52 @@ class _CrearEvento extends State<CrearEvento> {
           key: _formKey,
           child: ListView(
             children: [
+              SizedBox(height: 16),
+              Text('Nombre del evento', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+              const SizedBox(height: 8),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Título'),
-                validator: (value) => value == null || value.isEmpty ? 'Ingresa un título' : null,
+                validator: (value) => value == null || value.isEmpty ? 'Ingrese un nombre' : null,
                 onSaved: (value) => _titulo = value!,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  labelText: 'Nombre del evento'
+                ),
               ),
+              SizedBox(height: 26),
+              Text('Descripcion el evento', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+              const SizedBox(height: 8),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Descripción'),
-                maxLines: 3,
-                validator: (value) => value == null || value.isEmpty ? 'Ingresa una descripción' : null,
                 onSaved: (value) => _descripcion = value!,
+                maxLines: 4,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  labelText: 'Descripcion del evento',
+                ),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
+              BotonEstandar(
+                texto: '',
                 onPressed: _seleccionarFechaHora,
-                child: Text(_fechaHora == null
+                child: Text(
+                  _fechaHora == null
                     ? 'Seleccionar fecha y hora'
-                    : '${_fechaHora!.day}/${_fechaHora!.month}/${_fechaHora!.year} ${_fechaHora!.hour}:${_fechaHora!.minute.toString().padLeft(2, '0')}'),
+                    : '${_fechaHora!.day}/${_fechaHora!.month}/${_fechaHora!.year} ${_fechaHora!.hour}:${_fechaHora!.minute.toString().padLeft(2, '0')}',
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
               const SizedBox(height: 16),
-              ElevatedButton.icon(
+              BotonEstandar(
+                texto: 'asdasdasd',
                 onPressed: _irSeleccionarUbicacion,
-                icon: const Icon(Icons.map),
-                label: Text(_latLngSeleccionado == null
+                child: Text(_latLngSeleccionado == null
                     ? 'Seleccionar ubicación en el mapa'
-                    : 'Ubicación seleccionada: ${_latLngSeleccionado!.latitude.toStringAsFixed(4)}, ${_latLngSeleccionado!.longitude.toStringAsFixed(4)}'),
+                    : 'Ubicación seleccionada: ${_latLngSeleccionado!.latitude.toStringAsFixed(4)}, ${_latLngSeleccionado!.longitude.toStringAsFixed(4)}',
+                    style: const TextStyle(color: Colors.white),
+                  )
               ),
               const SizedBox(height: 16),
               ElevatedButton.icon(
