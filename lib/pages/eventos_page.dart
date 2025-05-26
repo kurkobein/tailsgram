@@ -70,6 +70,18 @@ class PaginaEventos extends StatelessWidget {
                           ? (evento['fechaHora'] as Timestamp).toDate()
                           : null;
 
+                      final ahora = DateTime.now();
+                      final hoy = DateTime(ahora.year, ahora.month, ahora.day, ahora.hour, ahora.minute);
+
+                      for (final doc in snapshot.data!.docs) {
+                        final fechaEvento = (doc['fechaHora'] as Timestamp).toDate();
+                        final fechaEventoSinHora = DateTime(fechaEvento.year, fechaEvento.month, fechaEvento.day, fechaEvento.hour, fechaEvento.minute);
+
+                        if (fechaEventoSinHora.isBefore(hoy)) {
+                          FirebaseFirestore.instance.collection('eventos').doc(doc.id).delete();
+                        }
+                      }
+
                       return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
                           child: Column(
