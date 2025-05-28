@@ -21,7 +21,7 @@ class MapEventService {
 
     final distanciaKm = distancia.as(LengthUnit.Kilometer, ubicacion, puntoEvento);
 
-    return distanciaKm <= 25.0;
+    return distanciaKm <= 40.0;
   }).map((doc) => {
     ...doc.data(),
     'id': doc.id,

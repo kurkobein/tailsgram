@@ -97,7 +97,7 @@ class MascotaService {
         LatLng(geo.latitude, geo.longitude),
       );
 
-      return distanciaKm <= 5;
+      return distanciaKm <= 40;
     }).map((doc) => {...doc.data(), 'id': doc.id}).toList();
 
     return mascotasFiltradas;
