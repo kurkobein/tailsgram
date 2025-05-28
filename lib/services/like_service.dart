@@ -34,13 +34,13 @@ class LikeService {
       if (inverso.docs.isNotEmpty) {
         // Verificar si ya existe el match
         final yaExisteMatch = await _db
-            .collection('matchs')
+            .collection('matches') 
             .where('mascota1Id', whereIn: [desdeMascotaId, haciaMascotaId])
             .where('mascota2Id', whereIn: [desdeMascotaId, haciaMascotaId])
             .get();
 
         if (yaExisteMatch.docs.isEmpty) {
-          await _db.collection('matchs').add({
+          await _db.collection('matches').add({
             'mascota1Id': desdeMascotaId,
             'mascota2Id': haciaMascotaId,
             'fechaMatch': FieldValue.serverTimestamp(),
