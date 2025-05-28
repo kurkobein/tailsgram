@@ -85,7 +85,7 @@ class _MatchScreenState extends State<MatchScreen> {
           LatLng(posicion.latitude, posicion.longitude),
           LatLng(geo.latitude, geo.longitude),
         );
-        return dist <= 5;
+        return dist <= 100;
       }).map((doc) => {...doc.data(), 'id': doc.id}).toList();
 
       setState(() {

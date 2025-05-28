@@ -44,7 +44,7 @@ class ListaChatsScreen extends StatelessWidget {
                   }
 
                   final userData = userSnapshot.data!.data() as Map<String, dynamic>;
-                  final nombre = userData['nombre'] ?? 'Usuario';
+                  final nombre = userData['usuario'] ?? 'Usuario';
 
                   return StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
