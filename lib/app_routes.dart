@@ -24,10 +24,13 @@ class AppRoutes {
     '/configuracion': (context)=>const ConfiguracionPerfil(),
     '/mascota-editar': (context) => const MascotaEditarScreen(),
     '/perfil-usuario': (context) => const PerfilUsuarioScreen(),
+    '/match': (_) => const MatchScreen(),
     '/chat': (context) {
       final args = ModalRoute.of(context)!.settings.arguments as String;
       return ChatScreen(otherUserId: args);
     },
+    '/buscar-eventos': (context) => const BuscarEventosScreen(),
+
     '/lista-chats': (context) => chats.ListaChatsScreen(),
     '/evento-detalle': (context)=> EventoDetalleScreen()
   };

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailsgram/widgets/publicaciones_widget.dart';
-import 'package:tailsgram/pages/match_screen.dart';
 
 class ListaPublicaciones extends StatelessWidget {
   const ListaPublicaciones({super.key});
@@ -13,39 +12,31 @@ class ListaPublicaciones extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // Botón de Match
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: Duration(milliseconds: 300),
-                    pageBuilder: (context, animation, secondaryAnimation) => Match(),
-                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                      const begin = Offset(-1.0, 0.0);
-                      const end = Offset.zero;
-                      final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: Curves.ease));
-                      return SlideTransition(position: animation.drive(tween), child: child);
-                    },
-                  ),
-                );
+                Navigator.pushNamed(context, '/match');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 198, 241, 214),
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(8),
                 shadowColor: Colors.transparent,
-              ), 
-              child: Icon(
+              ),
+              child: const Icon(
                 Icons.local_fire_department_rounded,
                 color: Colors.black,
                 size: 35,
-                
               ),
             ),
+
+            // Logo
             Image.asset(
               'assets/images/logo.png',
               height: 40,
             ),
+            
+            // Botón de Chat
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/lista-chats');
