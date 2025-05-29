@@ -29,7 +29,6 @@ class _MatchScreenState extends State<MatchScreen> {
     try {
       final uid = FirebaseAuth.instance.currentUser!.uid;
 
-      // Verificar permisos de ubicación
       LocationPermission permiso = await Geolocator.requestPermission();
       if (permiso == LocationPermission.denied || permiso == LocationPermission.deniedForever) {
         setState(() => _cargando = false);
@@ -39,20 +38,20 @@ class _MatchScreenState extends State<MatchScreen> {
         return;
       }
 
-      // 1. Obtener mascotas del usuario
       final propiasSnapshot = await FirebaseFirestore.instance
           .collection('mascotas')
           .where('duenoId', isEqualTo: uid)
           .get();
 
       final misMascotas = propiasSnapshot.docs.map((d) => {
-            ...d.data(),
-            'id': d.id,
-          }).toList();
+        ...d.data(),
+        'id': d.id,
+      }).toList();
 
       if (misMascotas.isEmpty) {
         setState(() {
           _misMascotas = [];
+          _mascotas = [];
           _cargando = false;
         });
         return;
@@ -60,7 +59,6 @@ class _MatchScreenState extends State<MatchScreen> {
 
       _miMascotaSeleccionadaId = misMascotas.first['id'];
 
-      // 2. Obtener mascotas cercanas no vistas
       final posicion = await Geolocator.getCurrentPosition();
       final distancia = Distance();
 
@@ -131,80 +129,85 @@ class _MatchScreenState extends State<MatchScreen> {
     setState(() => _indiceActual++);
   }
 
+  void _verHistorialInteracciones() {
+    Navigator.pushNamed(context, '/historial-interacciones');
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (_cargando) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    if (_misMascotas.isEmpty) {
-      return const Scaffold(
-        body: Center(child: Text('No tienes mascotas para hacer match.')),
-      );
-    }
-
-    if (_mascotas.isEmpty || _indiceActual >= _mascotas.length) {
-      return const Scaffold(
-        body: Center(child: Text('No hay mascotas cercanas disponibles.')),
-      );
-    }
-
-    final mascota = _mascotas[_indiceActual];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Explorar mascotas'),
         backgroundColor: const Color(0xFFAAF0D1),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            DropdownButtonFormField<String>(
-              value: _miMascotaSeleccionadaId,
-              items: _misMascotas.map((m) {
-                return DropdownMenuItem<String>(
-                  value: m['id'],
-                  child: Text(m['nombre']),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() => _miMascotaSeleccionadaId = value);
-              },
-              decoration: const InputDecoration(labelText: 'Selecciona tu mascota'),
-            ),
-            const SizedBox(height: 20),
-            Card(
-              elevation: 4,
-              child: Column(
-                children: [
-                  if (mascota['imagenUrl'] != null)
-                    Image.network(mascota['imagenUrl'], height: 200, fit: BoxFit.cover),
-                  ListTile(
-                    title: Text(mascota['nombre'] ?? ''),
-                    subtitle: Text(mascota['descripcion'] ?? ''),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.clear, color: Colors.red),
-                        onPressed: () => _interactuar('dislike'),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.favorite, color: Colors.green),
-                        onPressed: () => _interactuar('like'),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.list_alt),
+            tooltip: 'Historial de interacciones',
+            onPressed: _verHistorialInteracciones,
+          ),
+        ],
       ),
+      body: _cargando
+          ? const Center(child: CircularProgressIndicator())
+          : _misMascotas.isEmpty
+              ? const Center(child: Text('No tienes mascotas para hacer match.'))
+              : _mascotas.isEmpty || _indiceActual >= _mascotas.length
+                  ? const Center(child: Text('No hay mascotas cercanas disponibles.'))
+                  : Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          DropdownButtonFormField<String>(
+                            value: _miMascotaSeleccionadaId,
+                            items: _misMascotas.map((m) {
+                              return DropdownMenuItem<String>(
+                                value: m['id'],
+                                child: Text(m['nombre']),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() => _miMascotaSeleccionadaId = value);
+                            },
+                            decoration: const InputDecoration(labelText: 'Selecciona tu mascota'),
+                          ),
+                          const SizedBox(height: 20),
+                          Card(
+                            elevation: 4,
+                            child: Column(
+                              children: [
+                                if (_mascotas[_indiceActual]['imagenUrl'] != null)
+                                  Image.network(
+                                    _mascotas[_indiceActual]['imagenUrl'],
+                                    height: 200,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ListTile(
+                                  title: Text(_mascotas[_indiceActual]['nombre'] ?? ''),
+                                  subtitle: Text(_mascotas[_indiceActual]['descripcion'] ?? ''),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.clear, color: Colors.red),
+                                      onPressed: () => _interactuar('dislike'),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.favorite, color: Colors.green),
+                                      onPressed: () => _interactuar('like'),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
     );
   }
 }

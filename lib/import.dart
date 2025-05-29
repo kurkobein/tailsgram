@@ -9,3 +9,4 @@ export 'pages/mascota_screen/mascota_edit_screen.dart';
 export 'pages/evento_screen/evento_detalle.dart';
 export 'pages/match_screen.dart';
 export 'pages/evento_buscar_screen.dart';
+export 'pages/historial_interacciones.dart';

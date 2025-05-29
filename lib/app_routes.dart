@@ -32,6 +32,7 @@ class AppRoutes {
     '/buscar-eventos': (context) => const BuscarEventosScreen(),
 
     '/lista-chats': (context) => chats.ListaChatsScreen(),
-    '/evento-detalle': (context)=> EventoDetalleScreen()
+    '/evento-detalle': (context)=> EventoDetalleScreen(),
+    '/historial-interacciones':(context)=> HistorialInteraccionesScreen(),
   };
 }
