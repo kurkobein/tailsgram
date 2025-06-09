@@ -1,16 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../services/mascota_service.dart';
 
 class MascotaDetalleScreen extends StatelessWidget {
-  const MascotaDetalleScreen({super.key});
+  final DocumentSnapshot datos;
+  const MascotaDetalleScreen({super.key, required this.datos});
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments;
+    
 
-    late final String mascotaId;
-    late final Map<String, dynamic> data;
+
+    Map<String, dynamic> data = datos.data() as Map<String, dynamic>;
+    String mascotaId = datos.id;
+    final String usuarioIdActual = FirebaseAuth.instance.currentUser!.uid;
+
+    // Asegúrate de que el documento de la mascota tiene este campo:
+    final String duenoUid = data['duenoId'] ?? '';
+    final bool esMiPerfil = usuarioIdActual == duenoUid;
 
     if (args is DocumentSnapshot) {
       mascotaId = args.id;
@@ -23,6 +32,11 @@ class MascotaDetalleScreen extends StatelessWidget {
         body: Center(child: Text('Error: datos de la mascota no válidos')),
       );
     }
+
+    print('Datos de mascota: $data');
+    print('UID del dueño: ${data['duenoId']}');
+    print('UID actual: $usuarioIdActual');
+
 
     return Scaffold(
       backgroundColor: const Color(0xFFC5F3D6),
@@ -69,68 +83,72 @@ class MascotaDetalleScreen extends StatelessWidget {
             Text('Descripción:', style: _etiqueta()),
             Text(data['descripcion'] ?? '-', style: _valor()),
             const SizedBox(height: 30),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/mascota-editar',
-                        arguments: {'id': mascotaId, ...data},
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF6B81),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    child: const Text('Editar'),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      final confirmacion = await showDialog<bool>(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Eliminar mascota'),
-                          content: const Text('¿Estás seguro que deseas eliminar esta mascota?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, false),
-                              child: const Text('Cancelar'),
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                              onPressed: () => Navigator.pop(context, true),
-                              child: const Text('Eliminar'),
-                            ),
-                          ],
+            if (esMiPerfil) ...{
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/mascota-editar',
+                          arguments: {'id': mascotaId, ...data},
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFF6B81),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      );
-
-                      if (confirmacion == true) {
-                        await MascotaService().eliminarMascota(mascotaId);
-                        // ignore: use_build_context_synchronously
-                        Navigator.pushReplacementNamed(context, '/mascota-list');
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
                       ),
+                      child: const Text('Editar'),
                     ),
-                    child: const Text('Eliminar'),
                   ),
-                ),
-              ],
-            )
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final confirmacion = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Eliminar mascota'),
+                            content: const Text('¿Estás seguro que deseas eliminar esta mascota?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: const Text('Cancelar'),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                onPressed: () => Navigator.pop(context, true),
+                                child: const Text('Eliminar'),
+                              ),
+                            ],
+                          ),
+                        );
+
+                        if (confirmacion == true) {
+                          await MascotaService().eliminarMascota(mascotaId);
+                          // ignore: use_build_context_synchronously
+                          Navigator.pushReplacementNamed(context, '/mascota-list');
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: const Text('Eliminar'),
+                    ),
+                  ),
+                ],
+              )
+            } else ...{
+              SizedBox(width: 1)
+            }
           ],
         ),
       ),

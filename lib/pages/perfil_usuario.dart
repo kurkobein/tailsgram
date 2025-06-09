@@ -78,27 +78,6 @@ class PerfilUsuarioScreen extends StatelessWidget {
         if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
 
         final data = snapshot.data!.data() as Map<String, dynamic>;
-
-        // return Scaffold(
-        //   appBar: AppBar(title: Text(data['usuario'] ?? 'Perfil')),
-        //   body: Padding(
-        //     padding: const EdgeInsets.all(16),
-        //     child: Column(
-        //       children: [
-        //         CircleAvatar(
-        //           radius: 50,
-        //           backgroundImage: NetworkImage(data['fotoPerfilUrl'] ?? ''),
-        //         ),
-        //         const SizedBox(height: 16),
-        //         Text(data['nombre'] ?? '', style: TextStyle(fontSize: 20)),
-        //         Text(data['apellido'] ?? ''),
-        //         Text(data['telefono'] ?? ''),
-        //         const SizedBox(height: 10),
-        //         Text(data['descripcion'] ?? '', textAlign: TextAlign.center),
-        //       ],
-        //     ),
-        //   ),
-        // );
         return Scaffold(
           appBar: AppBar(
             backgroundColor: const Color.fromARGB(255, 198, 241, 214),
@@ -145,7 +124,7 @@ class PerfilUsuarioScreen extends StatelessWidget {
                   ),
                   Container(
                     height: 150,
-                    width: double.infinity, // Este hace que el contenedor ocupe todo el ancho disponible
+                    width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Color(0xFFD8D8D8)),
@@ -154,7 +133,7 @@ class PerfilUsuarioScreen extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: SizedBox(
-                        width: double.infinity, // Esto hace que el Text ocupe todo el ancho disponible dentro del padding
+                        width: double.infinity,
                         child: Text(
                           data['descripcion'] ?? '',
                           style: TextStyle(fontSize: 14),

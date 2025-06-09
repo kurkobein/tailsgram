@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:tailsgram/pages/auth_screen/profile_config_page.dart';
@@ -19,7 +20,11 @@ class AppRoutes {
       final args = ModalRoute.of(context)!.settings.arguments as String?;
       return MascotaListScreen(uid: args);
     },
-    '/mascota-detalle': (context)=>const MascotaDetalleScreen(),
+    '/mascota-detalle': (context) {
+      final args = ModalRoute.of(context)!.settings.arguments as DocumentSnapshot;
+      return MascotaDetalleScreen(datos: args);
+    },
+
     '/perfil': (context)=>const PerfilScreen(),
     '/configuracion': (context)=>const ConfiguracionPerfil(),
     '/mascota-editar': (context) => const MascotaEditarScreen(),
