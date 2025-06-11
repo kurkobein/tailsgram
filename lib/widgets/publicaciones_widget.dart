@@ -143,11 +143,7 @@ class _PostState extends State<Post> {
                 onPressed: _toggleLike,
               ),
               Text(_likeCount.toString()),
-              const SizedBox(width: 20),
-              IconButton(
-                icon: const Icon(Icons.comment),
-                onPressed: () {},
-              ),
+              const SizedBox(width: 20)
             ],
           ),
         ],
