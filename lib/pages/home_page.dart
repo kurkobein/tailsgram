@@ -12,7 +12,6 @@ class ListaPublicaciones extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Botón de Match
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/match');
@@ -30,13 +29,11 @@ class ListaPublicaciones extends StatelessWidget {
               ),
             ),
 
-            // Logo
             Image.asset(
               'assets/images/logo.png',
               height: 40,
             ),
-            
-            // Botón de Chat
+
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/lista-chats');

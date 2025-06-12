@@ -47,7 +47,6 @@ class _MascotaFormState extends State<MascotaForm> {
 
     setState(() => _isLoading = true);
 
-    // Subir imagen y obtener URL
     final imageUrl = await StorageService().subirImagenDesdeFile(
       _selectedImage!,
       _imageFileName!,
@@ -61,9 +60,8 @@ class _MascotaFormState extends State<MascotaForm> {
       setState(() => _isLoading = false);
       return;
     }
-    //obtener la ubicacion al momento de agregar la mascota
+    //obtener la ubicacion al agregar mascota
     Position pos= await Geolocator.getCurrentPosition();
-    // Guardar datos en Firestore
     await MascotaService().crearMascota(
       nombre: _nombreController.text,
       raza: _razaController.text,

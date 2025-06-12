@@ -106,7 +106,6 @@ class _PaginaMapaState extends State<PaginaMapa> {
                     
                    MarkerLayer(
   markers: [
-    // marcador del usuario
     Marker(
       point: _ubicacionActual!,
       width: 150,
@@ -119,7 +118,6 @@ class _PaginaMapaState extends State<PaginaMapa> {
         ],
       ),
     ),
-    // marcadores de eventos
     ..._eventosCercanos.map((evento) {
       final geo = evento['ubicacion'] as GeoPoint;
       return Marker(

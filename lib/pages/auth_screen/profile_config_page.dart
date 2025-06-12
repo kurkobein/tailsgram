@@ -77,10 +77,10 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
 
     for (var doc in snapshot.docs) {
       if (doc.id != uidActual) {
-        return true; // Existe otro usuario con ese nombre
+        return true;
       }
     }
-    return false; // Solo existes tú, o no existe
+    return false;
   }
 
 
@@ -333,7 +333,6 @@ class _ConfiguracionPerfilState extends State<ConfiguracionPerfil> {
                 final user = FirebaseAuth.instance.currentUser;
                 await user?.reauthenticateWithCredential(credential);
 
-                // ✅ Eliminar publicaciones del usuario
                 final uid = user?.uid;
                 if (uid != null) {
                   final publicaciones = await FirebaseFirestore.instance

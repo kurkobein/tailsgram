@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailsgram/widgets/publicaciones_widget.dart';
 
 class ListaPublicacionesPerfil extends StatelessWidget {
-  final String uidPerfil; // Este es el UID del perfil del usuario
+  final String uidPerfil;
 
   const ListaPublicacionesPerfil({super.key, required this.uidPerfil});
 
@@ -31,7 +31,7 @@ class ListaPublicacionesPerfil extends StatelessWidget {
 
         return ListView.builder(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(), // importante si está dentro de otro scroll
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: publicaciones.length,
           itemBuilder: (context, index) {
             final doc = publicaciones[index];
@@ -60,7 +60,7 @@ class ListaPublicacionesPerfil extends StatelessWidget {
                   nombreUsuario: nombreUsuario,
                   texto: texto,
                   fotoPerfil: fotoPerfilUrl,
-                  postId: doc.id, // Asegúrate de pasar el ID del documento
+                  postId: doc.id,
                 );
               },
             );

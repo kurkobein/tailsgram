@@ -20,7 +20,6 @@ class _PaginaSubirState extends State<PaginaSubir> {
   String? _imageFileName;
   bool _isLoading = false;
 
-  // Selecciona imagen con StorageService, pero no la sube aún
   Future<void> _seleccionarImagen() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);

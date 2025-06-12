@@ -16,7 +16,7 @@ class MascotaListScreen extends StatelessWidget {
 
 
     return Scaffold(
-      backgroundColor: const Color(0xFFC5F3D6), // fondo verde suave
+      backgroundColor: const Color(0xFFC5F3D6),
       appBar: AppBar(
         title: Text(esMiPerfil ? 'Mis Mascotas' : 'Mascotas del Usuario'),
         backgroundColor: const Color(0xFFAAF0D1),
@@ -120,7 +120,6 @@ class MascotaListScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  // Lógica para seguir al usuario
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFF6B81),
