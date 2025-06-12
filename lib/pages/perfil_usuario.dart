@@ -76,7 +76,6 @@ class PerfilUsuarioScreen extends StatelessWidget {
         if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
 
         final data = snapshot.data!.data() as Map<String, dynamic>;
-
         return Scaffold(
           appBar: AppBar(
             backgroundColor: const Color.fromARGB(255, 198, 241, 214),
